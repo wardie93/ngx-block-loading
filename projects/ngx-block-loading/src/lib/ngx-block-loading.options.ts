@@ -15,3 +15,14 @@ export interface NgxBlockLoadingOptions {
     defaultLoadingClass?: string;
     defaultLoadingFullPageClass?: string;
 }
+
+export const DEFAULT_OPTIONS: NgxBlockLoadingOptions = {
+    routesToIgnore: [],
+    defaultInTime: '0.25s',
+    defaultOutTime: '0.25s',
+    defaultLoaderOutTime: '0.25s',
+    defaultContainerHeight: '100px',
+    defaultLoadingContainerClass: 'ngx-block-loading--container',
+    defaultLoadingClass: 'ngx-block-loading',
+    defaultLoadingFullPageClass: 'ngx-block-loading__full-page'
+};

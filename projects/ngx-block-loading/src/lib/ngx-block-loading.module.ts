@@ -8,7 +8,11 @@ import {
 import { NgxBlockLoadingRenderingDirective } from './ngx-block-loading-rendering.directive';
 import { NgxBlockLoadingDirective } from './ngx-block-loading.directive';
 import { NgxBlockLoadingInterceptor } from './ngx-block-loading.interceptor';
-import { NGX_BLOCK_LOADING_OPTIONS, NgxBlockLoadingOptions } from './ngx-block-loading.options';
+import {
+    DEFAULT_OPTIONS,
+    NGX_BLOCK_LOADING_OPTIONS,
+    NgxBlockLoadingOptions
+} from './ngx-block-loading.options';
 
 // import 'loading.scss';
 export interface LoadingProviderOptions {
@@ -31,7 +35,7 @@ export interface LoadingProviderOptions {
 })
 export class NgxBlockLoadingModule {
     static forRoot(
-        options: LoadingProviderOptions
+        options?: LoadingProviderOptions
     ): ModuleWithProviders<NgxBlockLoadingModule> {
         return {
             ngModule: NgxBlockLoadingModule,
@@ -41,11 +45,40 @@ export class NgxBlockLoadingModule {
                     useClass: NgxBlockLoadingInterceptor,
                     multi: true
                 },
-                options.provider || {
+                options?.provider || {
                     provide: NGX_BLOCK_LOADING_OPTIONS,
-                    useValue: options.config
+                    useValue: setDefaultOptions(options?.config)
                 }
             ]
         };
     }
+}
+
+function setDefaultOptions(
+    options?: NgxBlockLoadingOptions
+): NgxBlockLoadingOptions {
+    const defaultOptions = DEFAULT_OPTIONS;
+    return {
+        routesToIgnore:
+            options?.routesToIgnore || defaultOptions.routesToIgnore,
+        loadingTemplate:
+            options?.loadingTemplate || defaultOptions.loadingTemplate,
+        defaultInTime: options?.defaultInTime || defaultOptions.defaultInTime,
+        defaultOutTime:
+            options?.defaultOutTime || defaultOptions.defaultOutTime,
+        defaultLoaderOutTime:
+            options?.defaultLoaderOutTime ||
+            defaultOptions.defaultLoaderOutTime,
+        defaultContainerHeight:
+            options?.defaultContainerHeight ||
+            defaultOptions.defaultContainerHeight,
+        defaultLoadingContainerClass:
+            options?.defaultLoadingContainerClass ||
+            defaultOptions.defaultLoadingContainerClass,
+        defaultLoadingClass:
+            options?.defaultLoadingClass || defaultOptions.defaultLoadingClass,
+        defaultLoadingFullPageClass:
+            options?.defaultLoadingFullPageClass ||
+            defaultOptions.defaultLoadingFullPageClass
+    };
 }

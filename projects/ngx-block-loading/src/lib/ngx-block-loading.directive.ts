@@ -84,15 +84,12 @@ export class NgxBlockLoadingDirective
         private readonly options: NgxBlockLoadingOptions,
         public readonly animationHelper: AnimationHelperService
     ) {
-        this.inTime = this.options.defaultInTime || '0.25s';
-        this.outTime = this.options.defaultOutTime || '0.25s';
-        this.loaderOutTime = this.options.defaultLoaderOutTime || '0.25s';
-        this.containerHeight = this.options.defaultContainerHeight || '100px';
-        this.loadingContainerClass =
-            this.options.defaultLoadingContainerClass ||
-            'ngx-block-loading--container';
-        this.loadingClass =
-            this.options.defaultLoadingClass || 'ngx-block-loading';
+        this.inTime = this.options.defaultInTime!;
+        this.outTime = this.options.defaultOutTime!;
+        this.loaderOutTime = this.options.defaultLoaderOutTime!;
+        this.containerHeight = this.options.defaultContainerHeight!;
+        this.loadingContainerClass = this.options.defaultLoadingContainerClass!;
+        this.loadingClass = this.options.defaultLoadingClass!;
 
         this.loadingService.loadingSource
             .pipe(takeUntil(this.onDestroy$))

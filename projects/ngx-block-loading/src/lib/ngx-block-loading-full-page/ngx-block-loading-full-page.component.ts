@@ -69,12 +69,9 @@ export class NgxBlockLoadingFullPageComponent
         private readonly options: NgxBlockLoadingOptions,
         public readonly animationHelper: AnimationHelperService
     ) {
-        this.loaderOutTime = this.options.defaultLoaderOutTime || '0.25s';
-        this.loadingClass =
-            this.options.defaultLoadingClass || 'ngx-block-loading';
-        this.loadingFullPageClass =
-            this.options.defaultLoadingFullPageClass ||
-            'ngx-block-loading__full-page';
+        this.loaderOutTime = this.options.defaultLoaderOutTime!;
+        this.loadingClass = this.options.defaultLoadingClass!;
+        this.loadingFullPageClass = this.options.defaultLoadingFullPageClass!;
 
         this.loadingService.fullPageLoadingSource
             .pipe(takeUntil(this.onDestroy$))

@@ -22,7 +22,7 @@
         "Angular spinner",
         "Angular loading spinner"
     ],
-    "author": "Zak Cox",
+    "author": "Liam Ward",
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/wardie93/ngx-block-loading/issues"

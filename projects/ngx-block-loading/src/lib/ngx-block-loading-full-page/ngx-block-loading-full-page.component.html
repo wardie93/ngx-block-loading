@@ -1,0 +1,7 @@
+<div #element>
+  <ng-container *ngIf="loading && template">
+    <ng-container *ngTemplateOutlet="template"></ng-container>
+  </ng-container>
+
+  <div class="{{loadingClass}} {{loadingFullPageClass}}" *ngIf="loading && !template"></div>
+</div>

@@ -125,7 +125,50 @@
           }
         }
       }
+    },
+    "ngx-block-loading": {
+      "projectType": "library",
+      "root": "projects/ngx-block-loading",
+      "sourceRoot": "projects/ngx-block-loading/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/ngx-block-loading/tsconfig.lib.json",
+            "project": "projects/ngx-block-loading/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ngx-block-loading/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-block-loading/src/test.ts",
+            "tsConfig": "projects/ngx-block-loading/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-block-loading/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-block-loading/tsconfig.lib.json",
+              "projects/ngx-block-loading/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
-  "defaultProject": "ngx-block-loading-app"
+  "defaultProject": "ngx-block-loading-app",
+  "cli": {
+    "analytics": "11ef082b-8e75-4b2c-9b0e-d5c66cc57f09"
+  }
 }

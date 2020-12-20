@@ -1,0 +1,35 @@
+{
+    "name": "ngx-block-loading",
+    "version": "0.0.1",
+    "description": "A spinner for Angular that will appear when HTTP requests are running.",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/wardie93/ngx-block-loading.git"
+    },
+    "keywords": [
+        "Angular",
+        "Angular",
+        "ng",
+        "ngx",
+        "load",
+        "loading",
+        "spinner",
+        "busy",
+        "wait",
+        "ngx-block-loading",
+        "Angular loading",
+        "Angular block loader",
+        "Angular spinner",
+        "Angular loading spinner"
+    ],
+    "author": "Zak Cox",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/wardie93/ngx-block-loading/issues"
+    },
+    "homepage": "https://github.com/wardie93/ngx-block-loading#readme",
+    "peerDependencies": {
+        "@angular/common": "^11.0.1",
+        "@angular/core": "^11.0.1"
+    }
+}

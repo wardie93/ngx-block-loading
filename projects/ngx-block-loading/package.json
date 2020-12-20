@@ -29,6 +29,7 @@
     },
     "homepage": "https://github.com/wardie93/ngx-block-loading#readme",
     "peerDependencies": {
+        "@angular/animations": "^11.0.1",
         "@angular/common": "^11.0.1",
         "@angular/core": "^11.0.1"
     }

@@ -14,7 +14,6 @@ import {
     NgxBlockLoadingOptions
 } from './ngx-block-loading.options';
 
-// import 'loading.scss';
 export interface LoadingProviderOptions {
     provider?: Provider;
     config?: NgxBlockLoadingOptions;

@@ -20,7 +20,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { AnimationHelperService, HasAnimations } from './animation-helper.service';
-import { NGX_BLOCK_LOADING_OPTIONS } from './ngx-block-loading.options';
+import { NGX_BLOCK_LOADING_OPTIONS, NgxBlockLoadingOptions } from './ngx-block-loading.options';
 import { NgxBlockLoadingService } from './ngx-block-loading.service';
 
 @Directive({
@@ -40,20 +40,28 @@ export class NgxBlockLoadingDirective
     loadingContainerClass: string;
     @Input()
     loadingClass: string;
+
+    private _isLoading: boolean = false;
+
     @Input('ngxBlockLoading')
-    isLoading: boolean = false;
+    set isLoading(value: boolean | '') {
+        this._isLoading = value !== '' || ((value as unknown) as boolean);
+    }
+    get isLoading(): boolean | '' {
+        return this._isLoading;
+    }
     @Input()
     fullPage: boolean = false;
 
     private loadingElement?: ElementRef;
     private hasLoadingElement: boolean = false;
-    player?: AnimationPlayer;
     private onDestroy$ = new Subject();
+    player?: AnimationPlayer;
 
     // Type for isLoading, without this it doesn't
     // work when the consuming app has strict template type checking enabled
-    // See https://angular.io/guide/structural-directives#improving-template-type-checking-for-custom-directives
-    static ngTemplateGuard_isLoading: 'binding';
+    // See https://angular.io/guide/template-typecheck#input-setter-coercion
+    static ngAcceptInputType_isLoading: boolean | '';
 
     private get loadingContainerStyle(): AnimationStyleMetadata {
         return style({

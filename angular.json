@@ -29,7 +29,7 @@
                         "assets": ["src/favicon.ico", "src/assets"],
                         "styles": ["src/styles.scss"],
                         "stylePreprocessorOptions": {
-                            "includePaths": ["dist/ngx-block-loading"]
+                            "includePaths": ["dist"]
                         },
                         "scripts": []
                     },

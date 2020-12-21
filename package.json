@@ -5,10 +5,11 @@
         "ng": "ng",
         "start": "ng serve -o",
         "build": "ng build",
+        "serve": "ng serve",
         "test": "ng test",
         "lint": "ng lint",
         "e2e": "ng e2e",
-        "serve:project": "ng build --project=ngx-block-loading --watch"
+        "serve:lib": "ng build --project=ngx-block-loading --watch"
     },
     "private": true,
     "dependencies": {

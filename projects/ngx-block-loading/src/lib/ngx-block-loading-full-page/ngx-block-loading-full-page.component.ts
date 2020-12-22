@@ -101,6 +101,7 @@ export class NgxBlockLoadingFullPageComponent
                 this.loadingStyle,
                 animate(this.loaderOutTime, this.notLoadingStyle)
             ]),
+            true,
             () => {
                 this.loading = false;
             }

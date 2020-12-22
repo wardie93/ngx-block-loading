@@ -184,6 +184,7 @@ export class NgxBlockLoadingDirective
                     })
                 )
             ]),
+            false,
             () => {
                 this.hasLoadingElement = false;
                 this.animationHelper.animate(
@@ -193,6 +194,7 @@ export class NgxBlockLoadingDirective
                         this.loadingStyle,
                         animate(this.loaderOutTime, this.notLoadingStyle)
                     ]),
+                    true,
                     () => {
                         this.renderer.removeChild(
                             this.element.nativeElement,

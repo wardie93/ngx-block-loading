@@ -16,6 +16,7 @@ export class AnimationHelperService {
         hasAnimations: HasAnimations,
         element: ElementRef | undefined,
         metadata: AnimationReferenceMetadata,
+        destroyOnDone: boolean = false,
         onDone?: () => void
     ): void {
         if (element) {
@@ -26,10 +27,22 @@ export class AnimationHelperService {
                 const lastPlayerWrapper =
                     notDonePlayers[notDonePlayers.length - 1];
                 lastPlayerWrapper.player.onDone(() => {
-                    this.runPlayer(hasAnimations, element, metadata, onDone);
+                    this.runPlayer(
+                        hasAnimations,
+                        element,
+                        metadata,
+                        destroyOnDone,
+                        onDone
+                    );
                 });
             } else {
-                this.runPlayer(hasAnimations, element, metadata, onDone);
+                this.runPlayer(
+                    hasAnimations,
+                    element,
+                    metadata,
+                    destroyOnDone,
+                    onDone
+                );
             }
         }
     }
@@ -38,6 +51,7 @@ export class AnimationHelperService {
         hasAnimations: HasAnimations,
         element: ElementRef | undefined,
         metadata: AnimationReferenceMetadata,
+        destroyOnDone: boolean = false,
         onDone?: () => void
     ): void {
         const factory = this.animationBuilder.build(useAnimation(metadata));
@@ -48,6 +62,17 @@ export class AnimationHelperService {
         };
         player.onDone(() => {
             playerWrapper.done = true;
+
+            if (destroyOnDone) {
+                hasAnimations.players.forEach(player => {
+                    player.player.destroy();
+                });
+            }
+
+            if (hasAnimations.players.every(player => player.done)) {
+                hasAnimations.players = [];
+            }
+
             if (onDone) {
                 onDone();
             }

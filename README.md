@@ -113,7 +113,12 @@ Most of the options across these levels are the same, so will just mark the opti
 
 ### Module Only
 
-There is only option that is configurable only at the module level.
+There is only one option that is configurable only at the module level.
+
+| Input          | Default | Details                                               |
+| -------------- | ------- | ----------------------------------------------------- |
+| routesToIgnore | []      | The routes to ignore when displaying the loading gifs |
+
 
 ### Element Levels
 

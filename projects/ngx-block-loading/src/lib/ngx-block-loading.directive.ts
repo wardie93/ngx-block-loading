@@ -172,6 +172,7 @@ export class NgxBlockLoadingDirective
     }
 
     private removeLoadingElement(): void {
+        this.players.forEach(player => player.player.destroy());
         this.animationHelper.animate(
             this,
             this.element,
@@ -184,7 +185,7 @@ export class NgxBlockLoadingDirective
                     })
                 )
             ]),
-            false,
+            true,
             () => {
                 this.hasLoadingElement = false;
                 this.animationHelper.animate(

@@ -7,7 +7,7 @@
     }
 }
 
-.loading {
+.ngx-block-loading {
     position: absolute;
     z-index: 999999;
     left: 0;
@@ -19,16 +19,11 @@
 
     background-color: rgba(128, 128, 128, 1);
 
-    &.ngx-block-loading__full-page {
-        position: fixed;
-        z-index: 1000000;
-    }
-
     &:after {
         content: '';
 
         position: absolute;
-        top: 25%;
+        top: 25px;
         left: 50%;
 
         animation: spin 2s linear infinite;
@@ -41,9 +36,18 @@
 
         color: white;
     }
+
+    &.ngx-block-loading__full-page {
+        position: fixed;
+        z-index: 1000000;
+
+        &:after {
+            top: 50%;
+        }
+    }
 }
 
-.loading--container {
+.ngx-block-loading--container {
     position: relative;
     overflow: hidden;
     z-index: 0;

@@ -56,7 +56,7 @@ export class NgxBlockLoadingDirective
     private loadingElement?: ElementRef;
     private hasLoadingElement: boolean = false;
     private onDestroy$ = new Subject();
-    player?: AnimationPlayer;
+    players: AnimationPlayer[] = [];
 
     // Type for isLoading, without this it doesn't
     // work when the consuming app has strict template type checking enabled
@@ -175,6 +175,8 @@ export class NgxBlockLoadingDirective
     }
 
     private removeLoadingElement(): void {
+        this.players.forEach(player => player.destroy());
+        this.players = [];
         this.animationHelper.animate(
             this,
             this.element,
@@ -187,6 +189,7 @@ export class NgxBlockLoadingDirective
                     })
                 )
             ]),
+            true,
             () => {
                 this.hasLoadingElement = false;
                 this.animationHelper.animate(
@@ -196,6 +199,7 @@ export class NgxBlockLoadingDirective
                         this.loadingStyle,
                         animate(this.loaderOutTime, this.notLoadingStyle)
                     ]),
+                    true,
                     () => {
                         this.renderer.removeChild(
                             this.element.nativeElement,

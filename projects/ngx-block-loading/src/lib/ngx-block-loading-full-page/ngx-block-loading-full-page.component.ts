@@ -46,7 +46,7 @@ export class NgxBlockLoadingFullPageComponent
     element?: ElementRef;
 
     loading: boolean = false;
-    player?: AnimationPlayer;
+    players: AnimationPlayer[] = [];
     private onDestroy$ = new Subject();
 
     private get loadingStyle(): AnimationStyleMetadata {
@@ -91,11 +91,11 @@ export class NgxBlockLoadingFullPageComponent
         if (value) {
             this.loading = true;
         } else {
-            this.renderOffFullPageLoading();
+            this.removeFullPageLoading();
         }
     }
 
-    private renderOffFullPageLoading(): void {
+    private removeFullPageLoading(): void {
         this.animationHelper.animate(
             this,
             this.element,
@@ -103,6 +103,7 @@ export class NgxBlockLoadingFullPageComponent
                 this.loadingStyle,
                 animate(this.loaderOutTime, this.notLoadingStyle)
             ]),
+            true,
             () => {
                 this.loading = false;
             }

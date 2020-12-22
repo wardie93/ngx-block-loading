@@ -16,30 +16,20 @@ export class AnimationHelperService {
         hasAnimations: HasAnimations,
         element: ElementRef | undefined,
         metadata: AnimationReferenceMetadata,
-        destroyOnDone: boolean = false,
         onDone?: () => void
     ): void {
         if (element) {
-            if (hasAnimations.players.length > 0) {
-                const lastPlayer =
-                    hasAnimations.players[hasAnimations.players.length - 1];
-                lastPlayer.onDone(() => {
-                    this.runPlayer(
-                        hasAnimations,
-                        element,
-                        metadata,
-                        destroyOnDone,
-                        onDone
-                    );
+            const notDonePlayers = hasAnimations.players.filter(
+                player => !player.done
+            );
+            if (notDonePlayers.length > 0) {
+                const lastPlayerWrapper =
+                    notDonePlayers[notDonePlayers.length - 1];
+                lastPlayerWrapper.player.onDone(() => {
+                    this.runPlayer(hasAnimations, element, metadata, onDone);
                 });
             } else {
-                this.runPlayer(
-                    hasAnimations,
-                    element,
-                    metadata,
-                    destroyOnDone,
-                    onDone
-                );
+                this.runPlayer(hasAnimations, element, metadata, onDone);
             }
         }
     }
@@ -48,27 +38,31 @@ export class AnimationHelperService {
         hasAnimations: HasAnimations,
         element: ElementRef | undefined,
         metadata: AnimationReferenceMetadata,
-        destroyOnDone: boolean = false,
         onDone?: () => void
     ): void {
         const factory = this.animationBuilder.build(useAnimation(metadata));
         const player = factory.create(element!.nativeElement);
+        const playerWrapper: AnimationPlayerWrapper = {
+            player: player,
+            done: false
+        };
         player.onDone(() => {
-            if (destroyOnDone) {
-                const index = hasAnimations.players.indexOf(player);
-                player.destroy();
-                hasAnimations.players.splice(index, 1);
-            }
+            playerWrapper.done = true;
             if (onDone) {
                 onDone();
             }
         });
         player.play();
-        hasAnimations.players.push(player);
+        hasAnimations.players.push(playerWrapper);
     }
 }
 
 export interface HasAnimations {
     readonly animationHelper: AnimationHelperService;
-    players: AnimationPlayer[];
+    players: AnimationPlayerWrapper[];
+}
+
+export interface AnimationPlayerWrapper {
+    player: AnimationPlayer;
+    done: boolean;
 }

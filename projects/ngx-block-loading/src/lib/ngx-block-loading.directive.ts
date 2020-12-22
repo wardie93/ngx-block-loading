@@ -1,11 +1,4 @@
-import {
-    animate,
-    animation,
-    AnimationPlayer,
-    AnimationStyleMetadata,
-    AUTO_STYLE,
-    style
-} from '@angular/animations';
+import { animate, animation, AnimationStyleMetadata, AUTO_STYLE, style } from '@angular/animations';
 import {
     Directive,
     ElementRef,
@@ -19,7 +12,11 @@ import {
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { AnimationHelperService, HasAnimations } from './animation-helper.service';
+import {
+    AnimationHelperService,
+    AnimationPlayerWrapper,
+    HasAnimations
+} from './animation-helper.service';
 import { NGX_BLOCK_LOADING_OPTIONS, NgxBlockLoadingOptions } from './ngx-block-loading.options';
 import { NgxBlockLoadingService } from './ngx-block-loading.service';
 
@@ -56,7 +53,7 @@ export class NgxBlockLoadingDirective
     private loadingElement?: ElementRef;
     private hasLoadingElement: boolean = false;
     private onDestroy$ = new Subject();
-    players: AnimationPlayer[] = [];
+    players: AnimationPlayerWrapper[] = [];
 
     // Type for isLoading, without this it doesn't
     // work when the consuming app has strict template type checking enabled
@@ -175,8 +172,6 @@ export class NgxBlockLoadingDirective
     }
 
     private removeLoadingElement(): void {
-        this.players.forEach(player => player.destroy());
-        this.players = [];
         this.animationHelper.animate(
             this,
             this.element,
@@ -189,7 +184,6 @@ export class NgxBlockLoadingDirective
                     })
                 )
             ]),
-            true,
             () => {
                 this.hasLoadingElement = false;
                 this.animationHelper.animate(
@@ -199,7 +193,6 @@ export class NgxBlockLoadingDirective
                         this.loadingStyle,
                         animate(this.loaderOutTime, this.notLoadingStyle)
                     ]),
-                    true,
                     () => {
                         this.renderer.removeChild(
                             this.element.nativeElement,

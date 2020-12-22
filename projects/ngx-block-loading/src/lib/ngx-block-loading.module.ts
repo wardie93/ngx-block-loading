@@ -5,7 +5,6 @@ import { ModuleWithProviders, NgModule, Provider } from '@angular/core';
 import {
     NgxBlockLoadingFullPageComponent
 } from './ngx-block-loading-full-page/ngx-block-loading-full-page.component';
-import { NgxBlockLoadingRenderingDirective } from './ngx-block-loading-rendering.directive';
 import { NgxBlockLoadingDirective } from './ngx-block-loading.directive';
 import { NgxBlockLoadingInterceptor } from './ngx-block-loading.interceptor';
 import {
@@ -13,6 +12,7 @@ import {
     NGX_BLOCK_LOADING_OPTIONS,
     NgxBlockLoadingOptions
 } from './ngx-block-loading.options';
+import { NgxBlockRenderedDirective } from './ngx-block-rendered.directive';
 
 export interface LoadingProviderOptions {
     provider?: Provider;
@@ -23,12 +23,12 @@ export interface LoadingProviderOptions {
     imports: [CommonModule],
     declarations: [
         NgxBlockLoadingDirective,
-        NgxBlockLoadingRenderingDirective,
+        NgxBlockRenderedDirective,
         NgxBlockLoadingFullPageComponent
     ],
     exports: [
         NgxBlockLoadingDirective,
-        NgxBlockLoadingRenderingDirective,
+        NgxBlockRenderedDirective,
         NgxBlockLoadingFullPageComponent
     ]
 })

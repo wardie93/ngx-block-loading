@@ -8,16 +8,20 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
     title = 'ngx-block-loading-app';
-
     fullPageLoading: boolean = false;
+    testRendering: boolean = false;
+    results: any[] = [];
 
     constructor(private readonly http: HttpClient) {}
 
     loadingTest(): void {
+        this.results = [];
         this.http
-            .get(
+            .get<any[]>(
                 'http://slowwly.robertomurray.co.uk/delay/5000/url/https://jsonplaceholder.typicode.com/posts'
             )
-            .subscribe();
+            .subscribe(response => {
+                this.results = response.slice(0, 10);
+            });
     }
 }

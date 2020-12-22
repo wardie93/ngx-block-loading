@@ -339,15 +339,45 @@
 
     </div>
 
-    <div>
-        <label>Full Page Loading</label>
-        <input type="checkbox" [(ngModel)]="fullPageLoading" />
-        <button (click)="loadingTest()">
-            Loading Test
-        </button>
+    <div class="flex flex-column flex-center">
+        <div class="margin-y">
+            <label>Full Page Loading?</label>
+            <input type="checkbox" [(ngModel)]="fullPageLoading" />
+        </div>
+        <div class="margin-y">
+            <label>Rendering Test?</label>
+            <input type="checkbox" [(ngModel)]="testRendering" />
+        </div>
+        <div class="margin-y">
+            <button (click)="loadingTest()">
+                Loading Test
+            </button>
+        </div>
     </div>
 
-    <div ngxBlockLoading [fullPage]="fullPageLoading">
+    <div class="full-width" ngxBlockLoading [fullPage]="fullPageLoading" *ngIf="testRendering">
+        <table class="full-width">
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Title</th>
+                    <th>Body</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let result of results; let isLast = last" [ngxBlockRendered]="isLast">
+                    <td>{{result.userId}}</td>
+                    <td>{{result.title}}</td>
+                    <td>{{result.body}}</td>
+                </tr>
+                <tr *ngIf="!results || results.length === 0">
+                    <td colspan="99">No results</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div ngxBlockLoading [fullPage]="fullPageLoading" *ngIf="!testRendering">
         This is a test element that will be used to test element loading.
     </div>
 

@@ -6,7 +6,7 @@ export {
     NgxBlockLoadingOptions
 } from './lib/ngx-block-loading.options';
 export * from './lib/ngx-block-loading.directive';
-export * from './lib/ngx-block-loading-rendering.directive';
+export * from './lib/ngx-block-rendered.directive';
 export * from './lib/ngx-block-loading.interceptor';
 export {
     NgxBlockLoadingModule,

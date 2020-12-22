@@ -1,10 +1,4 @@
-import {
-    animate,
-    animation,
-    AnimationPlayer,
-    AnimationStyleMetadata,
-    style
-} from '@angular/animations';
+import { animate, animation, AnimationStyleMetadata, style } from '@angular/animations';
 import {
     Component,
     ElementRef,
@@ -18,7 +12,11 @@ import {
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { AnimationHelperService, HasAnimations } from '../animation-helper.service';
+import {
+    AnimationHelperService,
+    AnimationPlayerWrapper,
+    HasAnimations
+} from '../animation-helper.service';
 import { NGX_BLOCK_LOADING_OPTIONS, NgxBlockLoadingOptions } from '../ngx-block-loading.options';
 import { NgxBlockLoadingService } from '../ngx-block-loading.service';
 
@@ -46,7 +44,7 @@ export class NgxBlockLoadingFullPageComponent
     element?: ElementRef;
 
     loading: boolean = false;
-    players: AnimationPlayer[] = [];
+    players: AnimationPlayerWrapper[] = [];
     private onDestroy$ = new Subject();
 
     private get loadingStyle(): AnimationStyleMetadata {
@@ -103,7 +101,6 @@ export class NgxBlockLoadingFullPageComponent
                 this.loadingStyle,
                 animate(this.loaderOutTime, this.notLoadingStyle)
             ]),
-            true,
             () => {
                 this.loading = false;
             }

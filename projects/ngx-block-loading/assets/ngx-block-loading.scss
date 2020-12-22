@@ -24,7 +24,7 @@
 
         position: absolute;
         top: 25px;
-        left: 50%;
+        left: max(50%, 25px);
 
         animation: spin 2s linear infinite;
 

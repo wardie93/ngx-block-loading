@@ -37,8 +37,6 @@ export class NgxBlockLoadingFullPageComponent
     loadingFullPageClass: string;
     @Input('loading')
     isLoading: boolean = false;
-    @Input()
-    fullPage: boolean = false;
 
     @ViewChild('element', { static: false })
     element?: ElementRef;
@@ -67,9 +65,9 @@ export class NgxBlockLoadingFullPageComponent
         private readonly options: NgxBlockLoadingOptions,
         public readonly animationHelper: AnimationHelperService
     ) {
-        this.loaderOutTime = this.options.defaultLoaderOutTime!;
-        this.loadingClass = this.options.defaultLoadingClass!;
-        this.loadingFullPageClass = this.options.defaultLoadingFullPageClass!;
+        this.loaderOutTime = this.options.loaderOutTime!;
+        this.loadingClass = this.options.loadingClass!;
+        this.loadingFullPageClass = this.options.loadingFullPageClass!;
 
         this.loadingService.fullPageLoadingSource
             .pipe(takeUntil(this.onDestroy$))

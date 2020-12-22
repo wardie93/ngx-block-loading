@@ -62,22 +62,16 @@ function setDefaultOptions(
             options?.routesToIgnore || defaultOptions.routesToIgnore,
         loadingTemplate:
             options?.loadingTemplate || defaultOptions.loadingTemplate,
-        defaultInTime: options?.defaultInTime || defaultOptions.defaultInTime,
-        defaultOutTime:
-            options?.defaultOutTime || defaultOptions.defaultOutTime,
-        defaultLoaderOutTime:
-            options?.defaultLoaderOutTime ||
-            defaultOptions.defaultLoaderOutTime,
-        defaultContainerHeight:
-            options?.defaultContainerHeight ||
-            defaultOptions.defaultContainerHeight,
-        defaultLoadingContainerClass:
-            options?.defaultLoadingContainerClass ||
-            defaultOptions.defaultLoadingContainerClass,
-        defaultLoadingClass:
-            options?.defaultLoadingClass || defaultOptions.defaultLoadingClass,
-        defaultLoadingFullPageClass:
-            options?.defaultLoadingFullPageClass ||
-            defaultOptions.defaultLoadingFullPageClass
+        inTime: options?.inTime || defaultOptions.inTime,
+        outTime: options?.outTime || defaultOptions.outTime,
+        loaderOutTime: options?.loaderOutTime || defaultOptions.loaderOutTime,
+        containerHeight:
+            options?.containerHeight || defaultOptions.containerHeight,
+        loadingContainerClass:
+            options?.loadingContainerClass ||
+            defaultOptions.loadingContainerClass,
+        loadingClass: options?.loadingClass || defaultOptions.loadingClass,
+        loadingFullPageClass:
+            options?.loadingFullPageClass || defaultOptions.loadingFullPageClass
     };
 }

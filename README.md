@@ -15,8 +15,6 @@ A loading spinner for Angular applications that appears when HTTP requests are r
     - [Rendering](#rendering)
   - [Customisation](#customisation)
     - [Input parameters](#input-parameters)
-    - [Module Only](#module-only)
-    - [Element Levels](#element-levels)
   - [TODO](#todo)
 
 ## Demo
@@ -99,29 +97,19 @@ Most of the options across these levels are the same, so will just mark the opti
 
 ### Input parameters
 
-| Input                 | Default                      | Module             | Element            | Full Page          | Details                                                                                            |
-| --------------------- | ---------------------------- | ------------------ | ------------------ | ------------------ | -------------------------------------------------------------------------------------------------- |
-| inTime                | 0.25s                        | :heavy_check_mark: | :heavy_check_mark: | :x:                | The length of time to animate the element that is block loading is shrunk to the specified height. |
-| outTime               | 0.25s                        | :heavy_check_mark: | :heavy_check_mark: | :x:                | The length of time to animate the element back to its normal size.                                 |
-| loaderOutTime         | 0.25s                        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | The length of time to take in removing the loading gif.                                            |
-| containerHeight       | 100px                        | :heavy_check_mark: | :heavy_check_mark: | :x:                | The height to take with the blocking loading gif.                                                  |
-| loadingContainerClass | ngx-block-loading--container | :heavy_check_mark: | :heavy_check_mark: | :x:                | The CSS class to put on the container for the block loading gif.                                   |
-| loadingClass          | ngx-block-loading            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | The CSS class to put on the loading element itself.                                                |
-| loadingFullPageClass  | ngx-block-loading__full-page | :heavy_check_mark: | :x:                | :heavy_check_mark: | The extra class that goes on the full page version of the loading element itself.                  |
-| template              |                              | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | The Angular template inserted as the loading element.                                              |
-
-### Module Only
-
-There is only one option that is configurable only at the module level.
-
-| Input          | Default | Details                                               |
-| -------------- | ------- | ----------------------------------------------------- |
-| routesToIgnore | []      | The routes to ignore when displaying the loading gifs |
-
-
-### Element Levels
-
-There is one option that can only be used at element level - an override for whether or not the loading animation should be displayed in this case.
+| Input                 | Default                      | Module             | Element            | Full Page          | Details                                                                                                         |
+| --------------------- | ---------------------------- | ------------------ | ------------------ | ------------------ | --------------------------------------------------------------------------------------------------------------- |
+| inTime                | 0.25s                        | :heavy_check_mark: | :heavy_check_mark: | :x:                | The length of time to animate the element that is block loading is shrunk to the specified height.              |
+| outTime               | 0.25s                        | :heavy_check_mark: | :heavy_check_mark: | :x:                | The length of time to animate the element back to its normal size.                                              |
+| loaderOutTime         | 0.25s                        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | The length of time to take in removing the loading gif.                                                         |
+| containerHeight       | 100px                        | :heavy_check_mark: | :heavy_check_mark: | :x:                | The height to take with the blocking loading gif.                                                               |
+| loadingContainerClass | ngx-block-loading--container | :heavy_check_mark: | :heavy_check_mark: | :x:                | The CSS class to put on the container for the block loading gif.                                                |
+| loadingClass          | ngx-block-loading            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | The CSS class to put on the loading element itself.                                                             |
+| loadingFullPageClass  | ngx-block-loading__full-page | :heavy_check_mark: | :x:                | :heavy_check_mark: | The extra class that goes on the full page version of the loading element itself.                               |
+| template              |                              | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | The Angular template inserted as the loading element.                                                           |
+| ngxBlockLoading       |                              | :x:                | :heavy_check_mark: | :x:                | Override whether or not to display the loading element. If this is specified running HTTP requests are ignored. |
+| isLoading             |                              | :x:                | :x:                | :heavy_check_mark: | Override whether or not to display the loading element. If this is specified running HTTP requests are ignored. |
+| routesToIgnore        | []                           | :heavy_check_mark: | :x:                | :x:                | The routes to ignore when displaying the loading gifs                                                           |
 
 ## TODO
 

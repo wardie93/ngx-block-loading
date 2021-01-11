@@ -44,7 +44,6 @@ Import the `NgxBlockLoadingModule` in your root application module:
 ```typescript
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { CoreModule } from './core/core.module';
 import { NgxBlockLoadingModule } from 'ngx-block-loading';
 
 @NgModule({
@@ -100,16 +99,16 @@ Most of the options across these levels are the same, so will just mark the opti
 
 ### Input parameters
 
-| Input                 | Default                      | Module             | Element            | Full Page          | Details |
-| --------------------- | ---------------------------- | ------------------ | ------------------ | ------------------ | ------- |
-| inTime                | 0.25s                        | :heavy_check_mark: | :heavy_check_mark: | :x:                |         |
-| outTime               | 0.25s                        | :heavy_check_mark: | :heavy_check_mark: | :x:                |         |
-| loaderOutTime         | 0.25s                        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |         |
-| containerHeight       | 100px                        | :heavy_check_mark: | :heavy_check_mark: | :x:                |         |
-| loadingContainerClass | ngx-block-loading--container | :heavy_check_mark: | :heavy_check_mark: | :x:                |         |
-| loadingClass          | ngx-block-loading            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |         |
-| loadingFullPageClass  | ngx-block-loading__full-page | :heavy_check_mark: | :x:                | :heavy_check_mark: |         |
-| template              |                              | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |         |
+| Input                 | Default                      | Module             | Element            | Full Page          | Details                                                                                            |
+| --------------------- | ---------------------------- | ------------------ | ------------------ | ------------------ | -------------------------------------------------------------------------------------------------- |
+| inTime                | 0.25s                        | :heavy_check_mark: | :heavy_check_mark: | :x:                | The length of time to animate the element that is block loading is shrunk to the specified height. |
+| outTime               | 0.25s                        | :heavy_check_mark: | :heavy_check_mark: | :x:                | The length of time to animate the element back to its normal size.                                 |
+| loaderOutTime         | 0.25s                        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | The length of time to take in removing the loading gif.                                            |
+| containerHeight       | 100px                        | :heavy_check_mark: | :heavy_check_mark: | :x:                | The height to take with the blocking loading gif.                                                  |
+| loadingContainerClass | ngx-block-loading--container | :heavy_check_mark: | :heavy_check_mark: | :x:                | The CSS class to put on the container for the block loading gif.                                   |
+| loadingClass          | ngx-block-loading            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | The CSS class to put on the loading element itself.                                                |
+| loadingFullPageClass  | ngx-block-loading__full-page | :heavy_check_mark: | :x:                | :heavy_check_mark: | The extra class that goes on the full page version of the loading element itself.                  |
+| template              |                              | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | The Angular template inserted as the loading element.                                              |
 
 ### Module Only
 

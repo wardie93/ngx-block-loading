@@ -7,7 +7,9 @@ import {
     OnChanges,
     OnDestroy,
     Renderer2,
-    SimpleChanges
+    SimpleChanges,
+    TemplateRef,
+    ViewContainerRef
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -43,16 +45,22 @@ export class NgxBlockLoadingDirective
     @Input('ngxBlockLoading')
     set isLoading(value: boolean | '') {
         this._isLoading = value !== '' || ((value as unknown) as boolean);
+        // Only override loading if the value isn't blank
+        // If the value is blank this means that the directive is empty
+        this.overrideLoading = value !== '';
     }
     get isLoading(): boolean | '' {
         return this._isLoading;
     }
     @Input()
     fullPage: boolean = false;
+    @Input()
+    template?: TemplateRef<any>;
 
     private loadingElement?: ElementRef;
     private hasLoadingElement: boolean = false;
     private onDestroy$ = new Subject();
+    private overrideLoading: boolean = false;
     players: AnimationPlayerWrapper[] = [];
 
     // Type for isLoading, without this it doesn't
@@ -88,8 +96,9 @@ export class NgxBlockLoadingDirective
 
     constructor(
         private element: ElementRef,
-        private readonly loadingService: NgxBlockLoadingService,
+        private readonly viewContainerRef: ViewContainerRef,
         private readonly renderer: Renderer2,
+        private readonly loadingService: NgxBlockLoadingService,
         @Inject(NGX_BLOCK_LOADING_OPTIONS)
         private readonly options: NgxBlockLoadingOptions,
         public readonly animationHelper: AnimationHelperService
@@ -104,13 +113,16 @@ export class NgxBlockLoadingDirective
         this.loadingService.loadingSource
             .pipe(takeUntil(this.onDestroy$))
             .subscribe(loading => {
-                this.updateLoading(loading);
+                if (!this.overrideLoading) {
+                    this.updateLoading(loading);
+                }
             });
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes['isLoading']) {
-            this.updateLoadingElement(this.loadingService.loading);
+        const isLoadingChanges = changes['isLoading'];
+        if (isLoadingChanges) {
+            this.updateLoadingElement(isLoadingChanges.currentValue);
         }
     }
 
@@ -119,20 +131,19 @@ export class NgxBlockLoadingDirective
         this.onDestroy$.complete();
     }
 
-    private updateLoading(loading: boolean): void {
+    private updateLoading(isLoading: boolean): void {
         if (this.fullPage) {
-            if (loading) {
+            if (isLoading) {
                 this.loadingService.addFullPageLoading();
             } else {
                 this.loadingService.removeFullPageLoading();
             }
         } else {
-            this.updateLoadingElement(loading);
+            this.updateLoadingElement(isLoading);
         }
     }
 
-    private updateLoadingElement(loading: boolean): void {
-        const isLoading = loading || this.isLoading === true;
+    private updateLoadingElement(isLoading: boolean): void {
         if (isLoading && !this.hasLoadingElement) {
             this.createLoadingElement();
         } else if (!isLoading && this.hasLoadingElement) {
@@ -142,14 +153,31 @@ export class NgxBlockLoadingDirective
         }
     }
 
+    private getTemplateElement(): ElementRef {
+        this.viewContainerRef.clear();
+        const viewRef = this.viewContainerRef.createEmbeddedView(
+            this.template!
+        );
+        const element = viewRef.rootNodes[0];
+        const duplicatedElement = element.cloneNode(true);
+        this.viewContainerRef.clear();
+        return new ElementRef(duplicatedElement);
+    }
+
     private createLoadingElement(): void {
         this.renderer.addClass(
             this.element.nativeElement,
             this.loadingContainerClass
         );
-        this.loadingElement = new ElementRef(
-            this.renderer.createElement('div')
-        );
+
+        if (this.template) {
+            this.loadingElement = this.getTemplateElement();
+        } else {
+            this.loadingElement = new ElementRef(
+                this.renderer.createElement('div')
+            );
+        }
+
         this.renderer.appendChild(
             this.element.nativeElement,
             this.loadingElement!.nativeElement
@@ -201,6 +229,7 @@ export class NgxBlockLoadingDirective
                             this.element.nativeElement,
                             this.loadingElement!.nativeElement
                         );
+
                         this.renderer.removeClass(
                             this.element.nativeElement,
                             this.loadingContainerClass

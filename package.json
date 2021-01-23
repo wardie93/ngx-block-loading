@@ -9,6 +9,7 @@
         "test": "ng test",
         "lint": "ng lint",
         "e2e": "ng e2e",
+        "build:lib": "ng build --project=ngx-block-loading",
         "serve:lib": "ng build --project=ngx-block-loading --watch"
     },
     "private": true,

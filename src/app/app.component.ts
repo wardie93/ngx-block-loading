@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 
 @Component({
     selector: 'app-root',
@@ -7,9 +7,13 @@ import { Component } from '@angular/core';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+    @ViewChild('template')
+    template?: TemplateRef<any>;
+
     title = 'ngx-block-loading-app';
     fullPageLoading: boolean = false;
     testRendering: boolean = false;
+    useTemplate: boolean = false;
     results: any[] = [];
 
     constructor(private readonly http: HttpClient) {}
@@ -18,7 +22,9 @@ export class AppComponent {
         this.results = [];
         this.http
             .get<any[]>(
-                'http://slowwly.robertomurray.co.uk/delay/5000/url/https://jsonplaceholder.typicode.com/posts'
+                // 'https://slowwly.robertomurray.co.uk/delay/5000/url/https://jsonplaceholder.typicode.com/posts'
+                // 'https://jsonplaceholder.typicode.com/todos/1'
+                'https://api.mocki.io/v1/a567c0a7'
             )
             .subscribe(response => {
                 this.results = response.slice(0, 10);

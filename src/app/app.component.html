@@ -349,13 +349,24 @@
             <input type="checkbox" [(ngModel)]="testRendering" />
         </div>
         <div class="margin-y">
+            <label>Use Template?</label>
+            <input type="checkbox" [(ngModel)]="useTemplate" />
+        </div>
+        <div class="margin-y">
             <button (click)="loadingTest()">
                 Loading Test
             </button>
         </div>
     </div>
 
+    <ng-template #template>
+        <div class="template-test">
+            Template
+        </div>
+    </ng-template>
+
     <div class="full-width" ngxBlockLoading [fullPage]="fullPageLoading" *ngIf="testRendering">
+        <h3 *ngIf="useTemplate">Template test</h3>
         <table class="full-width">
             <thead>
                 <tr>
@@ -378,6 +389,7 @@
     </div>
 
     <div ngxBlockLoading [fullPage]="fullPageLoading" *ngIf="!testRendering">
+        <h3 *ngIf="useTemplate">Template test</h3>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras in viverra tortor. Fusce non
         tincidunt
         arcu. Nulla ultricies, nulla eu euismod bibendum, quam elit placerat quam, et aliquet enim

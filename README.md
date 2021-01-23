@@ -74,7 +74,7 @@ If you want to block the whole page when loading in a certain case you need to h
 You also need to mark the element that you are loading for as using the full page version of loading.
 
 ```html
-<div ngxBlockLoading [fullPage]></div>
+<div ngxBlockLoading [fullPage]="true"></div>
 ```
 
 ### Rendering
@@ -113,5 +113,4 @@ Most of the options across these levels are the same, so will just mark the opti
 
 ## TODO
 
-- [ ] Make template work at element level and not just full page level
-- [ ] Investigate if I need the full page component like I think I do
+- [ ] Investigate if I need to use the directive for the full page loading component

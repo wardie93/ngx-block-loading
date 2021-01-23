@@ -21,7 +21,7 @@ export class AnimationHelperService {
     ): void {
         if (element) {
             const notDonePlayers = hasAnimations.players.filter(
-                player => !player.done
+                player => !this.isAnimationPlayerDone(player)
             );
             if (notDonePlayers.length > 0) {
                 const lastPlayerWrapper =
@@ -64,8 +64,12 @@ export class AnimationHelperService {
             playerWrapper.done = true;
 
             if (destroyOnDone) {
-                hasAnimations.players.forEach(player => {
-                    player.player.destroy();
+                hasAnimations.players.forEach(animationPlayer => {
+                    if (
+                        animationPlayer &&
+                        !this.isAnimationPlayerDone(animationPlayer)
+                    )
+                        animationPlayer.player.destroy();
                 });
             }
 
@@ -79,6 +83,13 @@ export class AnimationHelperService {
         });
         player.play();
         hasAnimations.players.push(playerWrapper);
+    }
+
+    private isAnimationPlayerDone(player: AnimationPlayerWrapper): boolean {
+        return (
+            player.done ||
+            player.player.totalTime === player.player.getPosition()
+        );
     }
 }
 

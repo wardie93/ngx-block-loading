@@ -15,7 +15,6 @@ A loading spinner for Angular applications that appears when HTTP requests are r
     - [Rendering](#rendering)
   - [Customisation](#customisation)
     - [Input parameters](#input-parameters)
-  - [TODO](#todo)
 
 ## Demo
 
@@ -71,10 +70,10 @@ If you want to block the whole page when loading in a certain case you need to h
 <ngx-block-loading-full-page></ngx-block-loading-full-page>
 ```
 
-You also need to mark the element that you are loading for as using the full page version of loading.
+You also need to mark the HTTP request as being a full page loading request.
 
-```html
-<div ngxBlockLoading [fullPage]="true"></div>
+```typescript
+this.http.get('https://test.com').pipe(fullPageLoading())
 ```
 
 ### Rendering
@@ -110,7 +109,3 @@ Most of the options across these levels are the same, so will just mark the opti
 | ngxBlockLoading       |                              | :x:                | :heavy_check_mark: | :x:                | Override whether or not to display the loading element. If this is specified running HTTP requests are ignored. |
 | isLoading             |                              | :x:                | :x:                | :heavy_check_mark: | Override whether or not to display the loading element. If this is specified running HTTP requests are ignored. |
 | routesToIgnore        | []                           | :heavy_check_mark: | :x:                | :x:                | The routes to ignore when displaying the loading gifs                                                           |
-
-## TODO
-
-- [ ] Investigate if I need to use the directive for the full page loading component

@@ -6,11 +6,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class NgxBlockLoadingService {
     loadingSource = new BehaviorSubject<boolean>(false);
-    fullPageLoadingSource = new BehaviorSubject<boolean>(false);
 
     private runningRequests: string[] = [];
     private rendering: Element[] = [];
-    private fullPageLoadingCount: number = 0;
 
     get loading(): boolean {
         return this.loadingSource.value;
@@ -18,14 +16,6 @@ export class NgxBlockLoadingService {
 
     get loadingAsync(): Observable<boolean> {
         return this.loadingSource;
-    }
-
-    get fullPageLoading(): boolean {
-        return this.fullPageLoadingSource.value;
-    }
-
-    get fullPageLoadingAsync(): Observable<boolean> {
-        return this.fullPageLoadingSource;
     }
 
     addRunningRequest(request: string): void {
@@ -65,25 +55,10 @@ export class NgxBlockLoadingService {
         }
     }
 
-    addFullPageLoading(): void {
-        this.fullPageLoadingCount++;
-        this.changeFullPageLoading();
-    }
-
-    removeFullPageLoading(): void {
-        this.fullPageLoadingCount--;
-        this.changeFullPageLoading();
-    }
-
     private changeLoading() {
         const val =
             this.runningRequests.length > 0 || this.rendering.length > 0;
 
         this.loadingSource.next(val);
-    }
-
-    private changeFullPageLoading(): void {
-        const val = this.fullPageLoadingCount > 0;
-        this.fullPageLoadingSource.next(val);
     }
 }

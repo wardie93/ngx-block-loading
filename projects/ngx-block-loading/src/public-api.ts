@@ -13,3 +13,4 @@ export {
     LoadingProviderOptions
 } from './lib/ngx-block-loading.module';
 export * from './lib/ngx-block-loading-full-page/ngx-block-loading-full-page.component';
+export { fullPageLoading } from './lib/full-page-loading.operator';

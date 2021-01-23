@@ -53,8 +53,6 @@ export class NgxBlockLoadingDirective
         return this._isLoading;
     }
     @Input()
-    fullPage: boolean = false;
-    @Input()
     template?: TemplateRef<any>;
 
     private loadingElement?: ElementRef;
@@ -132,15 +130,7 @@ export class NgxBlockLoadingDirective
     }
 
     private updateLoading(isLoading: boolean): void {
-        if (this.fullPage) {
-            if (isLoading) {
-                this.loadingService.addFullPageLoading();
-            } else {
-                this.loadingService.removeFullPageLoading();
-            }
-        } else {
-            this.updateLoadingElement(isLoading);
-        }
+        this.updateLoadingElement(isLoading);
     }
 
     private updateLoadingElement(isLoading: boolean): void {

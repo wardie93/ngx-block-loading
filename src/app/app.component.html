@@ -365,30 +365,33 @@
         </div>
     </ng-template>
 
-    <div class="full-width" ngxBlockLoading [fullPage]="fullPageLoading" *ngIf="testRendering">
-        <h3 *ngIf="useTemplate">Template test</h3>
-        <table class="full-width">
-            <thead>
-                <tr>
-                    <th>User ID</th>
-                    <th>Title</th>
-                    <th>Body</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let result of results; let isLast = last" [ngxBlockRendered]="isLast">
-                    <td>{{result.userId}}</td>
-                    <td>{{result.title}}</td>
-                    <td>{{result.body}}</td>
-                </tr>
-                <tr *ngIf="!results || results.length === 0">
-                    <td colspan="99">No results</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <ng-template #renderingTemplate>
+        <div class="full-width">
+            <h3 *ngIf="useTemplate">Template test</h3>
+            <table class="full-width">
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Title</th>
+                        <th>Body</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let result of results; let isLast = last"
+                        [ngxBlockRendered]="isLast">
+                        <td>{{result.userId}}</td>
+                        <td>{{result.title}}</td>
+                        <td>{{result.body}}</td>
+                    </tr>
+                    <tr *ngIf="!results || results.length === 0">
+                        <td colspan="99">No results</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </ng-template>
 
-    <div ngxBlockLoading [fullPage]="fullPageLoading" *ngIf="!testRendering">
+    <ng-template #notRenderingTemplate>
         <h3 *ngIf="useTemplate">Template test</h3>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras in viverra tortor. Fusce non
         tincidunt
@@ -403,7 +406,25 @@
         ipsum. Proin in egestas erat, a placerat mauris. Phasellus ut consequat urna. Nam id purus
         lorem.
         Interdum et malesuada fames ac ante ipsum primis in faucibus.
-    </div>
+    </ng-template>
+
+    <ng-container *ngIf="fullPageLoading">
+        <div *ngIf="testRendering">
+            <ng-container *ngTemplateOutlet="renderingTemplate"></ng-container>
+        </div>
+        <div *ngIf="!testRendering">
+            <ng-container *ngTemplateOutlet="notRenderingTemplate"></ng-container>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="!fullPageLoading">
+        <div ngxBlockLoading *ngIf="testRendering">
+            <ng-container *ngTemplateOutlet="renderingTemplate"></ng-container>
+        </div>
+        <div ngxBlockLoading *ngIf="!testRendering">
+            <ng-container *ngTemplateOutlet="notRenderingTemplate"></ng-container>
+        </div>
+    </ng-container>
 
     <!-- Links -->
     <div class="card-container">
@@ -573,4 +594,6 @@
 
 <router-outlet></router-outlet>
 
-<ngx-block-loading-full-page></ngx-block-loading-full-page>
+<ngx-block-loading-full-page *ngIf="!useTemplate"></ngx-block-loading-full-page>
+<ngx-block-loading-full-page *ngIf="useTemplate" [template]="template">
+</ngx-block-loading-full-page>

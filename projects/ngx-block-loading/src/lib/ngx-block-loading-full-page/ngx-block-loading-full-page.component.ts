@@ -17,8 +17,8 @@ import {
     AnimationPlayerWrapper,
     HasAnimations
 } from '../animation-helper.service';
+import { isLoadingFullPage } from '../full-page-loading.operator';
 import { NGX_BLOCK_LOADING_OPTIONS, NgxBlockLoadingOptions } from '../ngx-block-loading.options';
-import { NgxBlockLoadingService } from '../ngx-block-loading.service';
 
 @Component({
     selector: 'ngx-block-loading-full-page',
@@ -36,7 +36,7 @@ export class NgxBlockLoadingFullPageComponent
     @Input()
     loadingFullPageClass: string;
     @Input('loading')
-    isLoading: boolean = false;
+    isLoading?: boolean;
 
     @ViewChild('element', { static: false })
     element?: ElementRef;
@@ -60,7 +60,6 @@ export class NgxBlockLoadingFullPageComponent
     }
 
     constructor(
-        private readonly loadingService: NgxBlockLoadingService,
         @Inject(NGX_BLOCK_LOADING_OPTIONS)
         private readonly options: NgxBlockLoadingOptions,
         public readonly animationHelper: AnimationHelperService
@@ -69,22 +68,24 @@ export class NgxBlockLoadingFullPageComponent
         this.loadingClass = this.options.loadingClass!;
         this.loadingFullPageClass = this.options.loadingFullPageClass!;
 
-        this.loadingService.fullPageLoadingSource
+        isLoadingFullPage
             .pipe(takeUntil(this.onDestroy$))
             .subscribe(loading => {
-                this.updateLoading(loading);
+                if (this.isLoading == undefined) {
+                    this.updateLoading(loading);
+                }
             });
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes['loading']) {
-            this.updateLoading(this.loadingService.fullPageLoading);
+        const loadingChanges = changes['loading'];
+        if (loadingChanges) {
+            this.updateLoading(loadingChanges.currentValue);
         }
     }
 
     private updateLoading(loading: boolean): void {
-        const value = loading || this.isLoading;
-        if (value) {
+        if (loading) {
             this.loading = true;
         } else {
             this.removeFullPageLoading();

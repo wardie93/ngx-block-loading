@@ -10,7 +10,9 @@
         "lint": "ng lint",
         "e2e": "ng e2e",
         "build:lib": "ng build --project=ngx-block-loading",
-        "serve:lib": "ng build --project=ngx-block-loading --watch"
+        "build:lib:prod": "ng build --project=ngx-block-loading --prod",
+        "serve:lib": "ng build --project=ngx-block-loading --watch",
+        "serve:lib:prod": "ng build --project=ngx-block-loading --watch --prod"
     },
     "private": true,
     "dependencies": {

@@ -15,6 +15,7 @@ A loading spinner for Angular applications that appears when HTTP requests are r
     - [Rendering](#rendering)
   - [Customisation](#customisation)
     - [Input parameters](#input-parameters)
+    - [Styles](#styles)
 
 ## Demo
 
@@ -92,7 +93,7 @@ There are multiple levels at which you can customise.
 2. Element level
 3. Full page element level
 
-Most of the options across these levels are the same, so will just mark the options that are available at each level.
+Most of the options across these levels are the same, so he options are just marked with what is available at each level.
 
 ### Input parameters
 
@@ -109,3 +110,11 @@ Most of the options across these levels are the same, so will just mark the opti
 | ngxBlockLoading       |                              | :x:                | :heavy_check_mark: | :x:                | Override whether or not to display the loading element. If this is specified running HTTP requests are ignored. |
 | isLoading             |                              | :x:                | :x:                | :heavy_check_mark: | Override whether or not to display the loading element. If this is specified running HTTP requests are ignored. |
 | routesToIgnore        | []                           | :heavy_check_mark: | :x:                | :x:                | The routes to ignore when displaying the loading gifs                                                           |
+
+### Styles
+
+In order to use the default styles you want to add the following to your regular `scss` file.
+
+```scss
+@import 'ngx-block-loading/assets/ngx-block-loading.scss';
+```

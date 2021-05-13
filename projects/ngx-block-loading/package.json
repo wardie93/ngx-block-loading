@@ -1,6 +1,6 @@
 {
     "name": "ngx-block-loading",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "A spinner for Angular that will appear when HTTP requests are running.",
     "repository": {
         "type": "git",

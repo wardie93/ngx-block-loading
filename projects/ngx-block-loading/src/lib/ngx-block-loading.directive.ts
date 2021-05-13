@@ -1,4 +1,10 @@
-import { animate, animation, AnimationStyleMetadata, AUTO_STYLE, style } from '@angular/animations';
+import {
+    animate,
+    animation,
+    AnimationStyleMetadata,
+    AUTO_STYLE,
+    style
+} from '@angular/animations';
 import {
     Directive,
     ElementRef,
@@ -13,20 +19,23 @@ import {
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import {
     AnimationHelperService,
     AnimationPlayerWrapper,
     HasAnimations
 } from './animation-helper.service';
-import { NGX_BLOCK_LOADING_OPTIONS, NgxBlockLoadingOptions } from './ngx-block-loading.options';
+import {
+    NgxBlockLoadingOptions,
+    NGX_BLOCK_LOADING_OPTIONS
+} from './ngx-block-loading.options';
 import { NgxBlockLoadingService } from './ngx-block-loading.service';
 
 @Directive({
     selector: '[ngxBlockLoading]'
 })
 export class NgxBlockLoadingDirective
-    implements OnChanges, OnDestroy, HasAnimations {
+    implements OnChanges, OnDestroy, HasAnimations
+{
     @Input()
     inTime: string;
     @Input()
@@ -44,7 +53,7 @@ export class NgxBlockLoadingDirective
 
     @Input('ngxBlockLoading')
     set isLoading(value: boolean | '') {
-        this._isLoading = value !== '' || ((value as unknown) as boolean);
+        this._isLoading = value !== '' || (value as unknown as boolean);
         // Only override loading if the value isn't blank
         // If the value is blank this means that the directive is empty
         this.overrideLoading = value !== '';
@@ -190,7 +199,11 @@ export class NgxBlockLoadingDirective
     }
 
     private removeLoadingElement(): void {
-        this.players.forEach(player => player.player.destroy());
+        this.players.forEach(player => {
+            if (!this.animationHelper.isAnimationPlayerDone(player)) {
+                player.player.destroy();
+            }
+        });
         this.animationHelper.animate(
             this,
             this.element,

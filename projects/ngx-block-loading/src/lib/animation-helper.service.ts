@@ -68,8 +68,9 @@ export class AnimationHelperService {
                     if (
                         animationPlayer &&
                         !this.isAnimationPlayerDone(animationPlayer)
-                    )
+                    ) {
                         animationPlayer.player.destroy();
+                    }
                 });
             }
 
@@ -85,7 +86,7 @@ export class AnimationHelperService {
         hasAnimations.players.push(playerWrapper);
     }
 
-    private isAnimationPlayerDone(player: AnimationPlayerWrapper): boolean {
+    isAnimationPlayerDone(player: AnimationPlayerWrapper): boolean {
         return (
             player.done ||
             player.player.totalTime === player.player.getPosition()

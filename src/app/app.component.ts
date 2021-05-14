@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { fullPageLoading } from 'ngx-block-loading';
+import { ngxBlockLoadingFullPage } from 'ngx-block-loading';
 
 @Component({
     selector: 'app-root',
@@ -29,7 +29,7 @@ export class AppComponent {
         );
 
         if (this.fullPageLoading) {
-            httpRequest.pipe(fullPageLoading());
+            httpRequest.pipe(ngxBlockLoadingFullPage());
         }
 
         httpRequest.subscribe(response => {

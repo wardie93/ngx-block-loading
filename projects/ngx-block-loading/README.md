@@ -74,7 +74,7 @@ If you want to block the whole page when loading in a certain case you need to h
 You also need to mark the HTTP request as being a full page loading request.
 
 ```typescript
-this.http.get('https://test.com').pipe(fullPageLoading())
+this.http.get('https://test.com').pipe(ngxBlockLoadingFullPage())
 ```
 
 ### Rendering

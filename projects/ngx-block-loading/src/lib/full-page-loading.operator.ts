@@ -1,4 +1,4 @@
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, defer, Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
 let loadingCount = 0;
@@ -9,18 +9,17 @@ function updateLoading(): void {
     isLoadingFullPage.next(loadingCount > 0);
 }
 
-export function fullPageLoading() {
+export function ngxBlockLoadingFullPage() {
     return function <T>(source: Observable<T>): Observable<T> {
-        source
-            .pipe(
+        return defer(() => {
+            loadingCount++;
+            updateLoading();
+            return source.pipe(
                 finalize(() => {
                     loadingCount--;
                     updateLoading();
                 })
-            )
-            .subscribe();
-        loadingCount++;
-        updateLoading();
-        return source;
+            );
+        });
     };
 }

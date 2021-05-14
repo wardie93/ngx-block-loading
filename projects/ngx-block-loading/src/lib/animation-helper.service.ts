@@ -65,11 +65,18 @@ export class AnimationHelperService {
 
             if (destroyOnDone) {
                 hasAnimations.players.forEach(animationPlayer => {
-                    if (
-                        animationPlayer &&
-                        !this.isAnimationPlayerDone(animationPlayer)
-                    ) {
+                    try {
                         animationPlayer.player.destroy();
+                    } catch (error) {
+                        if (
+                            error &&
+                            error.message &&
+                            !error.message.includes(
+                                'Unable to find the timeline player referenced by'
+                            )
+                        ) {
+                            throw error;
+                        }
                     }
                 });
             }

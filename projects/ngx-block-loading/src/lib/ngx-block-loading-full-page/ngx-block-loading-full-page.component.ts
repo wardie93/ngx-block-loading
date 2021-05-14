@@ -1,4 +1,9 @@
-import { animate, animation, AnimationStyleMetadata, style } from '@angular/animations';
+import {
+    animate,
+    animation,
+    AnimationStyleMetadata,
+    style
+} from '@angular/animations';
 import {
     Component,
     ElementRef,
@@ -11,14 +16,16 @@ import {
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import {
     AnimationHelperService,
     AnimationPlayerWrapper,
     HasAnimations
 } from '../animation-helper.service';
 import { isLoadingFullPage } from '../full-page-loading.operator';
-import { NGX_BLOCK_LOADING_OPTIONS, NgxBlockLoadingOptions } from '../ngx-block-loading.options';
+import {
+    NgxBlockLoadingOptions,
+    NGX_BLOCK_LOADING_OPTIONS
+} from '../ngx-block-loading.options';
 
 @Component({
     selector: 'ngx-block-loading-full-page',
@@ -26,7 +33,8 @@ import { NGX_BLOCK_LOADING_OPTIONS, NgxBlockLoadingOptions } from '../ngx-block-
     styleUrls: ['./ngx-block-loading-full-page.component.scss']
 })
 export class NgxBlockLoadingFullPageComponent
-    implements OnChanges, HasAnimations {
+    implements OnChanges, HasAnimations
+{
     @Input()
     template?: TemplateRef<any>;
     @Input()

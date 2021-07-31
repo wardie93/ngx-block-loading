@@ -9,10 +9,14 @@
         "test": "ng test",
         "lint": "ng lint",
         "e2e": "ng e2e",
+        "version:patch": "cd projects/ngx-block-loading && npm version patch",
+        "version:minor": "cd projects/ngx-block-loading && npm version patch",
+        "version:major": "cd projects/ngx-block-loading && npm version patch",
         "build:lib": "ng build --project=ngx-block-loading",
         "build:lib:prod": "ng build --project=ngx-block-loading --prod",
-        "serve:lib": "ng build --project=ngx-block-loading --watch",
-        "serve:lib:prod": "ng build --project=ngx-block-loading --watch --prod"
+        "watch:lib": "ng build --project=ngx-block-loading --watch",
+        "watch:lib:prod": "ng build --project=ngx-block-loading --watch --prod",
+        "publish": "cd dist/ngx-block-loadig && npm publish"
     },
     "private": true,
     "dependencies": {

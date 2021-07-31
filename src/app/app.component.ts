@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { ngxBlockLoadingFullPage } from 'ngx-block-loading';
+import { delay } from 'rxjs/operators';
 
 @Component({
     selector: 'app-root',
@@ -23,10 +24,8 @@ export class AppComponent {
         this.results = [];
 
         const httpRequest = this.http.get<any[]>(
-            // 'https://slowwly.robertomurray.co.uk/delay/5000/url/https://jsonplaceholder.typicode.com/posts'
-            // 'https://jsonplaceholder.typicode.com/todos/1'
-            'https://api.mocki.io/v1/a567c0a7'
-        );
+            'http://localhost:3000/users'
+        ).pipe(delay(5000));
 
         if (this.fullPageLoading) {
             httpRequest.pipe(ngxBlockLoadingFullPage());

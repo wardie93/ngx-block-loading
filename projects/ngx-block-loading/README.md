@@ -22,6 +22,7 @@ A loading spinner for Angular applications that appears when HTTP requests are r
 For a demo, download the repository, then run the following commands
 
 ```
+npm run start-fake-api
 npm run watch:lib
 npm start
 ```

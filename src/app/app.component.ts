@@ -16,10 +16,13 @@ export class AppComponent {
     testRendering: boolean = false;
     useTemplate: boolean = false;
     results: any[] = [];
+    iteration: number = 0;
 
-    constructor(private readonly http: HttpClient) {}
+    constructor(private readonly http: HttpClient) { }
 
     loadingTest(): void {
+        this.iteration++;
+
         this.results = [];
 
         const httpRequest = this.http.get<any[]>(
@@ -31,7 +34,9 @@ export class AppComponent {
         }
 
         httpRequest.subscribe(response => {
-            this.results = response.slice(0, 10);
+            const pageSize = 10 - (this.iteration % 10 - 1);
+
+            this.results = response.slice(0, pageSize);
         });
     }
 }

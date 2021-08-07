@@ -16,7 +16,7 @@
         "build:lib:prod": "ng build --project=ngx-block-loading --prod",
         "watch:lib": "ng build --project=ngx-block-loading --watch",
         "watch:lib:prod": "ng build --project=ngx-block-loading --watch --prod",
-        "publish": "cd dist/ngx-block-loadig && npm publish",
+        "publish": "cd dist/ngx-block-loading && npm publish",
         "start-fake-api": "json-server json-server/db.json --route json-server/routes.json --no-cors true --delay 5000"
     },
     "private": true,

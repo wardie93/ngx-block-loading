@@ -26,7 +26,15 @@ export class AnimationHelperService {
             if (notDonePlayers.length > 0) {
                 const lastPlayerWrapper =
                     notDonePlayers[notDonePlayers.length - 1];
-                lastPlayerWrapper.player.onDone(() => {
+                this.tryRunMethodOnPlayer(() => lastPlayerWrapper.player.onDone(() => {
+                    this.runPlayer(
+                        hasAnimations,
+                        element,
+                        metadata,
+                        destroyOnDone,
+                        onDone
+                    );
+                }), () => {
                     this.runPlayer(
                         hasAnimations,
                         element,
@@ -65,19 +73,7 @@ export class AnimationHelperService {
 
             if (destroyOnDone) {
                 hasAnimations.players.forEach(animationPlayer => {
-                    try {
-                        animationPlayer.player.destroy();
-                    } catch (error) {
-                        if (
-                            error &&
-                            error.message &&
-                            !error.message.includes(
-                                'Unable to find the timeline player referenced by'
-                            )
-                        ) {
-                            throw error;
-                        }
-                    }
+                    this.tryRunMethodOnPlayer(() => animationPlayer.player.destroy());
                 });
             }
 
@@ -98,6 +94,29 @@ export class AnimationHelperService {
             player.done ||
             player.player.totalTime === player.player.getPosition()
         );
+    }
+
+    tryRunMethodOnPlayer(playerMethod: () => void, callbackIfFailed?: () => void): void {
+        try {
+            playerMethod();
+        } catch (error) {
+            // This error means that the player has been destroyed
+            // However, Angular doesn't provide a means of checking if this has been done already
+            // So we have to catch the error
+            if (
+                error &&
+                error.message &&
+                !error.message.includes(
+                    'Unable to find the timeline player referenced by'
+                )
+            ) {
+                throw error;
+            }
+
+            if (callbackIfFailed) {
+                callbackIfFailed();
+            }
+        }
     }
 }
 

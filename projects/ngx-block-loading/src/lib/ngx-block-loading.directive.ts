@@ -34,8 +34,7 @@ import { NgxBlockLoadingService } from './ngx-block-loading.service';
     selector: '[ngxBlockLoading]'
 })
 export class NgxBlockLoadingDirective
-    implements OnChanges, OnDestroy, HasAnimations
-{
+    implements OnChanges, OnDestroy, HasAnimations {
     @Input()
     inTime: string;
     @Input()
@@ -201,7 +200,7 @@ export class NgxBlockLoadingDirective
     private removeLoadingElement(): void {
         this.players.forEach(player => {
             if (!this.animationHelper.isAnimationPlayerDone(player)) {
-                player.player.destroy();
+                this.animationHelper.tryRunMethodOnPlayer(() => player.player.destroy());
             }
         });
         this.animationHelper.animate(

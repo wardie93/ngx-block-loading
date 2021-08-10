@@ -1,6 +1,6 @@
-import { Directive, ElementRef, Input, OnChanges, OnDestroy } from '@angular/core';
-
+import { Directive, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { NgxBlockLoadingService } from './ngx-block-loading.service';
+
 
 @Directive({
     selector: '[ngxBlockRendered]'
@@ -10,11 +10,14 @@ export class NgxBlockRenderedDirective implements OnChanges, OnDestroy {
 
     @Input('ngxBlockRendered')
     set isRendered(value: boolean | '') {
-        this._isRendered = value !== '' || ((value as unknown) as boolean);
+        this._isRendered =  value !== '' && value === true;
     }
     get isRendered(): boolean | '' {
         return this._isRendered;
     }
+
+    @Input()
+    forceAdd: boolean = false;
 
     // Type for isLoading, without this it doesn't
     // work when the consuming app has strict template type checking enabled
@@ -26,10 +29,15 @@ export class NgxBlockRenderedDirective implements OnChanges, OnDestroy {
         private readonly loadingService: NgxBlockLoadingService
     ) {}
 
-    ngOnChanges(): void {
-        if (this.isRendered) {
-            this.loadingService.removeRenderingElement(this.element);
-        } else {
+    ngOnChanges(changes: SimpleChanges): void {
+        if(changes['isRendered']) {
+            if (this.isRendered) {
+                this.loadingService.removeRenderingElement(this.element);
+            } else {
+                this.loadingService.addRenderingElement(this.element);
+            }
+        }
+        if(changes['forceAdd'] && this.forceAdd) {
             this.loadingService.addRenderingElement(this.element);
         }
     }

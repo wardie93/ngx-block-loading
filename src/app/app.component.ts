@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { ngxBlockLoadingFullPage } from 'ngx-block-loading';
+import { ngxBlockLoading, ngxBlockLoadingFullPage } from 'ngx-block-loading';
+import { NgxBlockLoadingDirective } from 'projects/ngx-block-loading/src/public-api';
 
 @Component({
     selector: 'app-root',
@@ -10,6 +11,9 @@ import { ngxBlockLoadingFullPage } from 'ngx-block-loading';
 export class AppComponent {
     @ViewChild('template')
     template?: TemplateRef<any>;
+
+    @ViewChild('loadingDirective')
+    loadingDirective?: NgxBlockLoadingDirective;
 
     title = 'ngx-block-loading-app';
     fullPageLoading: boolean = false;
@@ -27,14 +31,14 @@ export class AppComponent {
 
         const httpRequest = this.http.get<any[]>(
             'http://localhost:3000/users'
-        );
+        ).pipe(ngxBlockLoading(this.loadingDirective));
 
         if (this.fullPageLoading) {
             httpRequest.pipe(ngxBlockLoadingFullPage());
         }
 
         httpRequest.subscribe(response => {
-            const pageSize = 10 - (this.iteration % 10 - 1);
+            const pageSize = 10 - ((this.iteration % 10) - 1);
 
             this.results = response.slice(0, pageSize);
         });

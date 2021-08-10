@@ -18,7 +18,6 @@ import {
     ViewContainerRef
 } from '@angular/core';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import {
     AnimationHelperService,
     AnimationPlayerWrapper,
@@ -28,10 +27,10 @@ import {
     NgxBlockLoadingOptions,
     NGX_BLOCK_LOADING_OPTIONS
 } from './ngx-block-loading.options';
-import { NgxBlockLoadingService } from './ngx-block-loading.service';
 
 @Directive({
-    selector: '[ngxBlockLoading]'
+    selector: '[ngxBlockLoading]',
+    exportAs: 'ngxBlockLoading'
 })
 export class NgxBlockLoadingDirective
     implements OnChanges, OnDestroy, HasAnimations {
@@ -104,7 +103,6 @@ export class NgxBlockLoadingDirective
         private element: ElementRef,
         private readonly viewContainerRef: ViewContainerRef,
         private readonly renderer: Renderer2,
-        private readonly loadingService: NgxBlockLoadingService,
         @Inject(NGX_BLOCK_LOADING_OPTIONS)
         private readonly options: NgxBlockLoadingOptions,
         public readonly animationHelper: AnimationHelperService
@@ -115,14 +113,6 @@ export class NgxBlockLoadingDirective
         this.containerHeight = this.options.containerHeight!;
         this.loadingContainerClass = this.options.loadingContainerClass!;
         this.loadingClass = this.options.loadingClass!;
-
-        this.loadingService.loadingSource
-            .pipe(takeUntil(this.onDestroy$))
-            .subscribe(loading => {
-                if (!this.overrideLoading) {
-                    this.updateLoading(loading);
-                }
-            });
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -137,11 +127,7 @@ export class NgxBlockLoadingDirective
         this.onDestroy$.complete();
     }
 
-    private updateLoading(isLoading: boolean): void {
-        this.updateLoadingElement(isLoading);
-    }
-
-    private updateLoadingElement(isLoading: boolean): void {
+    updateLoadingElement(isLoading: boolean): void {
         if (isLoading && !this.hasLoadingElement) {
             this.createLoadingElement();
         } else if (!isLoading && this.hasLoadingElement) {

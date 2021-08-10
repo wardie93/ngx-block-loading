@@ -418,10 +418,10 @@
     </ng-container>
 
     <ng-container *ngIf="!fullPageLoading">
-        <div ngxBlockLoading *ngIf="testRendering">
+        <div ngxBlockLoading *ngIf="testRendering" #loadingDirective="ngxBlockLoading">
             <ng-container *ngTemplateOutlet="renderingTemplate"></ng-container>
         </div>
-        <div ngxBlockLoading *ngIf="!testRendering">
+        <div ngxBlockLoading *ngIf="!testRendering" #loadingDirective="ngxBlockLoading">
             <ng-container *ngTemplateOutlet="notRenderingTemplate"></ng-container>
         </div>
     </ng-container>

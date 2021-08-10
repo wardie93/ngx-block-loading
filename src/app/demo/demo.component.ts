@@ -3,9 +3,9 @@ import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { ngxBlockLoading, NgxBlockLoadingDirective, ngxBlockLoadingFullPage } from 'ngx-block-loading';
 
 @Component({
-  selector: 'app-demo',
-  templateUrl: './demo.component.html',
-  styleUrls: ['./demo.component.scss']
+    selector: 'app-demo',
+    templateUrl: './demo.component.html',
+    styleUrls: ['./demo.component.scss']
 })
 export class DemoComponent {
     @ViewChild('template')
@@ -27,12 +27,15 @@ export class DemoComponent {
 
         this.results = [];
 
-        const httpRequest = this.http.get<any[]>(
+        let httpRequest = this.http.get<any[]>(
             'http://localhost:3000/users'
-        ).pipe(ngxBlockLoading(this.loadingDirective));
+        );
 
         if (this.fullPageLoading) {
-            httpRequest.pipe(ngxBlockLoadingFullPage());
+            httpRequest = httpRequest.pipe(ngxBlockLoadingFullPage());
+        }
+        else {
+            httpRequest = httpRequest.pipe(ngxBlockLoading(this.loadingDirective));
         }
 
         httpRequest.subscribe(response => {

@@ -14,6 +14,7 @@ export function ngxBlockLoadingFullPage() {
         return defer(() => {
             loadingCount++;
             updateLoading();
+
             return source.pipe(
                 finalize(() => {
                     loadingCount--;

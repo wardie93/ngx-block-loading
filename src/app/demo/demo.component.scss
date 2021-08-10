@@ -1,0 +1,42 @@
+.flex {
+    display: flex;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.flex-center {
+    align-items: center;
+    justify-content: center;
+}
+
+.margin-y {
+    margin: 5px 0;
+}
+
+table,
+th,
+td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+
+.full-width {
+    width: 100%;
+}
+
+.template-test {
+    position: absolute;
+    z-index: 999999;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+
+    box-sizing: border-box;
+
+    background-color: black;
+    color: white;
+}

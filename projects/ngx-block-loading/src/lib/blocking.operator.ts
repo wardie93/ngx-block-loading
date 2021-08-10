@@ -1,6 +1,6 @@
-import { NgxBlockLoadingDirective } from 'projects/ngx-block-loading/src/lib/ngx-block-loading.directive';
 import { defer, Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
+import { NgxBlockLoadingDirective } from './ngx-block-loading.directive';
 
 export function ngxBlockLoading(
     ...directives: Array<NgxBlockLoadingDirective | undefined>

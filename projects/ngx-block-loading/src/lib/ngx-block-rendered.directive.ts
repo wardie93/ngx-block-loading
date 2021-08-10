@@ -1,7 +1,6 @@
 import { Directive, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { NgxBlockLoadingService } from './ngx-block-loading.service';
 
-
 @Directive({
     selector: '[ngxBlockRendered]'
 })

@@ -5,7 +5,6 @@ export const NGX_BLOCK_LOADING_OPTIONS = new InjectionToken(
 );
 
 export interface NgxBlockLoadingOptions {
-    routesToIgnore: Array<string | RegExp>;
     loadingTemplate?: TemplateRef<any>;
     inTime?: string;
     outTime?: string;
@@ -17,7 +16,6 @@ export interface NgxBlockLoadingOptions {
 }
 
 export const DEFAULT_OPTIONS: NgxBlockLoadingOptions = {
-    routesToIgnore: [],
     inTime: '0.25s',
     outTime: '0.25s',
     loaderOutTime: '0.25s',

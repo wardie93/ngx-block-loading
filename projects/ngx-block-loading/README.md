@@ -110,8 +110,6 @@ Most of the options across these levels are the same, so he options are just mar
 | template              |                              | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | The Angular template inserted as the loading element.                                                           |
 | ngxBlockLoading       |                              | :x:                | :heavy_check_mark: | :x:                | Override whether or not to display the loading element. If this is specified running HTTP requests are ignored. |
 | isLoading             |                              | :x:                | :x:                | :heavy_check_mark: | Override whether or not to display the loading element. If this is specified running HTTP requests are ignored. |
-| routesToIgnore        | []                           | :heavy_check_mark: | :x:                | :x:                | The routes to ignore when displaying the loading gifs                                                           |
-
 ### Styles
 
 In order to use the default styles you want to add the following to your regular `scss` file.

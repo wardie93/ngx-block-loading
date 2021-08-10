@@ -7,7 +7,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class NgxBlockLoadingService {
     loadingSource = new BehaviorSubject<boolean>(false);
 
-    private runningRequests: string[] = [];
     private rendering: Element[] = [];
 
     get loading(): boolean {
@@ -16,24 +15,6 @@ export class NgxBlockLoadingService {
 
     get loadingAsync(): Observable<boolean> {
         return this.loadingSource;
-    }
-
-    addRunningRequest(request: string): void {
-        if (!this.runningRequests.includes(request)) {
-            this.runningRequests.push(request);
-        }
-
-        this.changeLoading();
-    }
-
-    removeRunningRequest(request: string): void {
-        const requestIndex = this.runningRequests.indexOf(request);
-
-        if (requestIndex > -1) {
-            this.runningRequests.splice(requestIndex, 1);
-        }
-
-        this.changeLoading();
     }
 
     addRenderingElement(element: ElementRef): void {
@@ -56,8 +37,7 @@ export class NgxBlockLoadingService {
     }
 
     private changeLoading() {
-        const val =
-            this.runningRequests.length > 0 || this.rendering.length > 0;
+        const val = this.rendering.length > 0;
 
         this.loadingSource.next(val);
     }

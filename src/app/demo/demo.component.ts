@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { ngxBlockLoading, NgxBlockLoadingDirective, ngxBlockLoadingFullPage } from 'ngx-block-loading';
+import { ngxBlockLoading, NgxBlockLoadingDirective } from 'ngx-block-loading';
 
 @Component({
     selector: 'app-demo',
@@ -32,10 +32,10 @@ export class DemoComponent {
         );
 
         if (this.fullPageLoading) {
-            httpRequest = httpRequest.pipe(ngxBlockLoadingFullPage());
+            httpRequest = httpRequest.pipe(ngxBlockLoading({ fullPage: true }));
         }
         else {
-            httpRequest = httpRequest.pipe(ngxBlockLoading(this.loadingDirective));
+            httpRequest = httpRequest.pipe(ngxBlockLoading({ blocking: this.loadingDirective }));
         }
 
         httpRequest.subscribe(response => {

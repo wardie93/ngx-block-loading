@@ -21,7 +21,7 @@ import {
     AnimationPlayerWrapper,
     HasAnimations
 } from '../animation-helper.service';
-import { isLoadingFullPage } from '../full-page-loading.operator';
+import { isLoadingFullPage } from '../blocking.operator';
 import {
     NgxBlockLoadingOptions,
     NGX_BLOCK_LOADING_OPTIONS

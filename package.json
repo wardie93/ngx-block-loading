@@ -18,7 +18,7 @@
         "watch:lib:prod": "ng build --project=ngx-block-loading --watch --prod",
         "publish": "cd dist/ngx-block-loading && npm publish",
         "start-fake-api": "json-server json-server/db.json --route json-server/routes.json --no-cors true --delay 5000",
-        "develop": "concurrently --kill-others \"npm start\" \"npm run watch:lib\" \"npm run start-fake-api\""
+        "develop": "concurrently --kill-others \"npm run start-fake-api\" \"npm run watch:lib\" \"npm start\" "
     },
     "private": true,
     "dependencies": {

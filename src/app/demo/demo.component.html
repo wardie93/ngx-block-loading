@@ -4,14 +4,14 @@
         <input type="checkbox" [(ngModel)]="fullPageLoading"
             id="fullPageLoading" />
     </div>
+    <div class="margin-y" *ngIf="fullPageLoading">
+        <label for="useTemplate">Use Template?</label>
+        <input type="checkbox" [(ngModel)]="useTemplate" id="useTemplate" />
+    </div>
     <div class="margin-y">
         <label for="testRendering">Rendering Test?</label>
         <input type="checkbox" [(ngModel)]="testRendering"
         id="testRendering" />
-    </div>
-    <div class="margin-y">
-        <label for="useTemplate">Use Template?</label>
-        <input type="checkbox" [(ngModel)]="useTemplate" id="useTemplate" />
     </div>
     <div class="margin-y">
         <button (click)="loadingTest()">

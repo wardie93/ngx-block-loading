@@ -24,7 +24,7 @@ export class AnimationHelperService {
         loadingElement: ElementRef;
     }[] = [];
 
-    constructor(private readonly animationBuilder: AnimationBuilder) {}
+    constructor(private readonly animationBuilder: AnimationBuilder) { }
 
     private elementRefEquals(
         one: ElementRef | undefined,
@@ -72,7 +72,8 @@ export class AnimationHelperService {
             return [];
         }
 
-        return this.players[playerWrapperIndex].players;
+        const players = this.players[playerWrapperIndex].players;
+        return players;
     }
 
     private clearPlayers(element: ElementRef | undefined): void {
@@ -107,20 +108,30 @@ export class AnimationHelperService {
                 element: element,
                 loadingElement: loadingElement
             });
-            return;
         }
     }
 
     private getLoadingElement(
         element: ElementRef | undefined
     ): ElementRef | undefined {
+        if (!element) {
+            return;
+        }
+
         const loadingElementIndex = this.getLoadingElementIndex(element);
 
         if (loadingElementIndex === -1) {
             return undefined;
         }
 
-        return this.loadingElements[loadingElementIndex].loadingElement;
+        const loadingElement =
+            this.loadingElements[loadingElementIndex].loadingElement;
+
+        if (!loadingElement.nativeElement.parentNode) {
+            loadingElement.nativeElement.parentNode = element.nativeElement;
+        }
+
+        return loadingElement;
     }
 
     private removeLoadingElement(element: ElementRef | undefined): void {
@@ -255,7 +266,7 @@ export class AnimationHelperService {
     tryCreateLoadingElement(
         element: ElementRef | undefined,
         loadingElement: ElementRef,
-        classes: { loading: string; container: string },
+        classes: { loading: string; container: string; },
         styles: {
             containerLoading: AnimationStyleMetadata;
             containerNotLoading: AnimationStyleMetadata;
@@ -267,8 +278,6 @@ export class AnimationHelperService {
             return;
         }
 
-        this.addLoadingElement(element, loadingElement);
-
         renderer.addClass(element.nativeElement, classes.container);
 
         renderer.appendChild(
@@ -277,6 +286,7 @@ export class AnimationHelperService {
         );
         renderer.addClass(loadingElement!.nativeElement, classes.loading);
 
+        this.addLoadingElement(element, loadingElement);
         this.hasLoadingElement.push(element);
 
         this.animate(
@@ -290,12 +300,13 @@ export class AnimationHelperService {
 
     tryRemoveLoadingElement(
         element: ElementRef | undefined,
-        classes: { loading: string; container: string },
+        classes: { loading: string; container: string; },
         styles: {
             loading: AnimationStyleMetadata;
+            loadingContainer: AnimationStyleMetadata,
             notLoading: AnimationStyleMetadata;
         },
-        times: { outTime: string; loaderOutTime: string },
+        times: { outTime: string; loaderOutTime: string; },
         renderer: Renderer2
     ): void {
         if (!element || !this.isElementLoading(element)) {
@@ -314,7 +325,7 @@ export class AnimationHelperService {
         this.animate(
             element,
             animation([
-                styles.loading,
+                styles.loadingContainer,
                 animate(
                     times.outTime,
                     style({
@@ -333,7 +344,7 @@ export class AnimationHelperService {
                 }
 
                 this.animate(
-                    element,
+                    loadingElement,
                     animation([
                         styles.loading,
                         animate(times.loaderOutTime, styles.notLoading)
@@ -346,7 +357,7 @@ export class AnimationHelperService {
                                 loadingElement!.nativeElement
                             );
 
-                            this.removeLoadingElement(loadingElement);
+                            this.removeLoadingElement(element);
                         } else {
                             throw new Error(
                                 'There is no element that was created for blocking, something has gone wrong.'

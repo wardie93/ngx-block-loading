@@ -123,6 +123,7 @@ export abstract class BaseLoadingDirective implements OnDestroy {
                         },
                         {
                             loading: this.loadingStyle,
+                            loadingContainer: this.loadingContainerStyle,
                             notLoading: this.notLoadingStyle
                         },
                         {

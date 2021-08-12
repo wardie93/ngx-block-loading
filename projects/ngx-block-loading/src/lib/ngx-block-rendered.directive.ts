@@ -1,47 +1,58 @@
-import { Directive, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
-import { NgxBlockLoadingService } from './ngx-block-loading.service';
+import {
+    Directive,
+    ElementRef,
+    Input,
+    OnChanges,
+    SimpleChanges
+} from '@angular/core';
+import { BaseLoadingDirective } from './base-loading.directive';
 
 @Directive({
     selector: '[ngxBlockRendered]'
 })
-export class NgxBlockRenderedDirective implements OnChanges, OnDestroy {
+export class NgxBlockRenderedDirective
+    extends BaseLoadingDirective
+    implements OnChanges
+{
     private _isRendered: boolean = false;
 
     @Input('ngxBlockRendered')
     set isRendered(value: boolean | '') {
-        this._isRendered =  value !== '' && value === true;
+        this._isRendered = value !== '' && value === true;
     }
     get isRendered(): boolean | '' {
         return this._isRendered;
     }
 
     @Input()
-    forceAdd: boolean = false;
+    startOnInit = true;
+    @Input()
+    forceStart = false;
 
-    // Type for isLoading, without this it doesn't
+    // Type for isLoading and forceAdd, without this it doesn't
     // work when the consuming app has strict template type checking enabled
     // See https://angular.io/guide/template-typecheck#input-setter-coercion
     static ngAcceptInputType_isRendered: boolean | '';
 
-    constructor(
-        private readonly element: ElementRef,
-        private readonly loadingService: NgxBlockLoadingService
-    ) {}
-
-    ngOnChanges(changes: SimpleChanges): void {
-        if(changes['isRendered']) {
-            if (this.isRendered) {
-                this.loadingService.removeRenderingElement(this.element);
-            } else {
-                this.loadingService.addRenderingElement(this.element);
-            }
+    protected get elementToLoad(): ElementRef | undefined {
+        if (this.element?.nativeElement.parentElement) {
+            return new ElementRef(this.element?.nativeElement.parentElement);
         }
-        if(changes['forceAdd'] && this.forceAdd) {
-            this.loadingService.addRenderingElement(this.element);
+        return undefined;
+    }
+
+    ngOnInit(): void {
+        if (this.startOnInit && !this.isRendered) {
+            this.start();
         }
     }
 
-    ngOnDestroy(): void {
-        this.loadingService.removeRenderingElement(this.element);
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['isRendered'] && this.isRendered) {
+            this.stop();
+        }
+        if (changes['forceStart'] && !this.isRendered) {
+            this.start();
+        }
     }
 }

@@ -10,7 +10,6 @@ import { ngxBlockLoading, NgxBlockLoadingDirective } from 'ngx-block-loading';
 export class DemoComponent {
     @ViewChild('template')
     template?: TemplateRef<any>;
-
     @ViewChild('loadingDirective')
     loadingDirective?: NgxBlockLoadingDirective;
 
@@ -20,22 +19,21 @@ export class DemoComponent {
     results: any[] = [];
     iteration: number = 0;
 
-    constructor(private readonly http: HttpClient) { }
+    constructor(private readonly http: HttpClient) {}
 
     loadingTest(): void {
         this.iteration++;
 
         this.results = [];
 
-        let httpRequest = this.http.get<any[]>(
-            'http://localhost:3000/users'
-        );
+        let httpRequest = this.http.get<any[]>('http://localhost:3000/users');
 
         if (this.fullPageLoading) {
             httpRequest = httpRequest.pipe(ngxBlockLoading({ fullPage: true }));
-        }
-        else {
-            httpRequest = httpRequest.pipe(ngxBlockLoading({ blocking: this.loadingDirective }));
+        } else {
+            httpRequest = httpRequest.pipe(
+                ngxBlockLoading({ blocking: this.loadingDirective })
+            );
         }
 
         httpRequest.subscribe(response => {

@@ -1,4 +1,3 @@
-import { NgxBlockRenderedDirective } from 'projects/ngx-block-loading/src/lib/ngx-block-rendered.directive';
 import { BehaviorSubject, defer, Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { NgxBlockLoadingDirective } from './ngx-block-loading.directive';
@@ -30,28 +29,24 @@ function updateFullPageLoading(): void {
 export function ngxBlockLoading(
     params: {
         blocking?: NgxBlockLoadingDirective | NgxBlockLoadingDirective[],
-        fullPage?: boolean,
-        rendering?: NgxBlockRenderedDirective | NgxBlockRenderedDirective[];
+        fullPage?: boolean;
     }
 ) {
     let loadingDirectives = getArray<NgxBlockLoadingDirective>(params.blocking);
-    let renderedDirectives = getArray<NgxBlockRenderedDirective>(params.rendering);
 
     return function <T>(source: Observable<T>): Observable<T> {
         return defer(() => {
-            loadingDirectives.forEach(d => d.updateLoadingElement(true));
+            loadingDirectives.forEach(d => d.start());
 
-            if(params.fullPage) {
+            if (params.fullPage) {
                 loadingCount++;
                 updateFullPageLoading();
             }
 
             return source.pipe(
                 finalize(() => {
-                    loadingDirectives.forEach(d =>
-                        d.updateLoadingElement(false)
-                    );
-                    if(params.fullPage) {
+                    loadingDirectives.forEach(d => d.stop());
+                    if (params.fullPage) {
                         loadingCount--;
                         updateFullPageLoading();
                     }

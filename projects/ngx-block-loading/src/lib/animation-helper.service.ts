@@ -1,62 +1,149 @@
 import {
+    animate,
+    animation,
     AnimationBuilder,
     AnimationPlayer,
     AnimationReferenceMetadata,
+    AnimationStyleMetadata,
+    style,
     useAnimation
 } from '@angular/animations';
-import { ElementRef, Injectable } from '@angular/core';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 
 @Injectable({
     providedIn: 'root'
 })
 export class AnimationHelperService {
+    private readonly hasLoadingElement: ElementRef[] = [];
+    private readonly players: {
+        element: ElementRef;
+        players: AnimationPlayerWrapper[];
+    }[] = [];
+    private readonly loadingElements: {
+        element: ElementRef;
+        loadingElement: ElementRef;
+    }[] = [];
+
     constructor(private readonly animationBuilder: AnimationBuilder) {}
 
-    animate(
-        hasAnimations: HasAnimations,
+    private elementRefEquals(
+        one: ElementRef | undefined,
+        two: ElementRef | undefined
+    ): boolean {
+        return one?.nativeElement.isSameNode(two?.nativeElement);
+    }
+
+    private getPlayerWrapperIndex(element: ElementRef | undefined): number {
+        const playerWrapperIndex = this.players.findIndex(e =>
+            this.elementRefEquals(e.element, element)
+        );
+        return playerWrapperIndex;
+    }
+
+    private addPlayer(
         element: ElementRef | undefined,
-        metadata: AnimationReferenceMetadata,
-        destroyOnDone: boolean = false,
-        onDone?: () => void
+        player: AnimationPlayerWrapper
     ): void {
-        if (element) {
-            const notDonePlayers = hasAnimations.players.filter(
-                player => !this.isAnimationPlayerDone(player)
-            );
-            if (notDonePlayers.length > 0) {
-                const lastPlayerWrapper =
-                    notDonePlayers[notDonePlayers.length - 1];
-                this.tryRunMethodOnPlayer(() => lastPlayerWrapper.player.onDone(() => {
-                    this.runPlayer(
-                        hasAnimations,
-                        element,
-                        metadata,
-                        destroyOnDone,
-                        onDone
-                    );
-                }), () => {
-                    this.runPlayer(
-                        hasAnimations,
-                        element,
-                        metadata,
-                        destroyOnDone,
-                        onDone
-                    );
-                });
-            } else {
-                this.runPlayer(
-                    hasAnimations,
-                    element,
-                    metadata,
-                    destroyOnDone,
-                    onDone
-                );
-            }
+        if (!element) {
+            return;
+        }
+
+        const playerWrapperIndex = this.getPlayerWrapperIndex(element);
+
+        if (playerWrapperIndex === -1) {
+            this.players.push({ element: element, players: [player] });
+            return;
+        }
+
+        const playerWrapper = this.players[playerWrapperIndex];
+
+        this.players[playerWrapperIndex] = {
+            element: element,
+            players: playerWrapper.players.concat(player)
+        };
+    }
+
+    private getPlayers(
+        element: ElementRef | undefined
+    ): AnimationPlayerWrapper[] {
+        const playerWrapperIndex = this.getPlayerWrapperIndex(element);
+
+        if (playerWrapperIndex === -1) {
+            return [];
+        }
+
+        return this.players[playerWrapperIndex].players;
+    }
+
+    private clearPlayers(element: ElementRef | undefined): void {
+        const playerWrapperIndex = this.getPlayerWrapperIndex(element);
+
+        if (playerWrapperIndex === -1) {
+            return;
+        }
+
+        this.players.splice(playerWrapperIndex, 1);
+    }
+
+    private getLoadingElementIndex(element: ElementRef | undefined): number {
+        const loadingElementIndex = this.loadingElements.findIndex(e =>
+            this.elementRefEquals(e.element, element)
+        );
+        return loadingElementIndex;
+    }
+
+    private addLoadingElement(
+        element: ElementRef | undefined,
+        loadingElement: ElementRef
+    ): void {
+        if (!element) {
+            return;
+        }
+
+        const loadingElementIndex = this.getLoadingElementIndex(element);
+
+        if (loadingElementIndex === -1) {
+            this.loadingElements.push({
+                element: element,
+                loadingElement: loadingElement
+            });
+            return;
         }
     }
 
-    runPlayer(
-        hasAnimations: HasAnimations,
+    private getLoadingElement(
+        element: ElementRef | undefined
+    ): ElementRef | undefined {
+        const loadingElementIndex = this.getLoadingElementIndex(element);
+
+        if (loadingElementIndex === -1) {
+            return undefined;
+        }
+
+        return this.loadingElements[loadingElementIndex].loadingElement;
+    }
+
+    private removeLoadingElement(element: ElementRef | undefined): void {
+        const loadingElementIndex = this.getLoadingElementIndex(element);
+
+        if (loadingElementIndex === -1) {
+            return;
+        }
+
+        this.loadingElements.splice(loadingElementIndex, 1);
+    }
+
+    private isElementLoading(element: ElementRef | undefined): boolean {
+        if (!element) {
+            return false;
+        }
+
+        return this.hasLoadingElement.some(e =>
+            this.elementRefEquals(e, element)
+        );
+    }
+
+    private runPlayer(
         element: ElementRef | undefined,
         metadata: AnimationReferenceMetadata,
         destroyOnDone: boolean = false,
@@ -71,14 +158,18 @@ export class AnimationHelperService {
         player.onDone(() => {
             playerWrapper.done = true;
 
+            const players = this.getPlayers(element);
+
             if (destroyOnDone) {
-                hasAnimations.players.forEach(animationPlayer => {
-                    this.tryRunMethodOnPlayer(() => animationPlayer.player.destroy());
+                players.forEach(animationPlayer => {
+                    this.tryRunMethodOnPlayer(() =>
+                        animationPlayer.player.destroy()
+                    );
                 });
             }
 
-            if (hasAnimations.players.every(player => player.done)) {
-                hasAnimations.players = [];
+            if (players.every(player => player.done)) {
+                this.clearPlayers(element);
             }
 
             if (onDone) {
@@ -86,17 +177,20 @@ export class AnimationHelperService {
             }
         });
         player.play();
-        hasAnimations.players.push(playerWrapper);
+        this.addPlayer(element, playerWrapper);
     }
 
-    isAnimationPlayerDone(player: AnimationPlayerWrapper): boolean {
+    private isAnimationPlayerDone(player: AnimationPlayerWrapper): boolean {
         return (
             player.done ||
             player.player.totalTime === player.player.getPosition()
         );
     }
 
-    tryRunMethodOnPlayer(playerMethod: () => void, callbackIfFailed?: () => void): void {
+    private tryRunMethodOnPlayer(
+        playerMethod: () => void,
+        callbackIfFailed?: () => void
+    ): void {
         try {
             playerMethod();
         } catch (error) {
@@ -118,14 +212,159 @@ export class AnimationHelperService {
             }
         }
     }
+
+    animate(
+        element: ElementRef | undefined,
+        metadata: AnimationReferenceMetadata,
+        destroyOnDone: boolean = false,
+        onDone?: () => void
+    ): void {
+        if (element) {
+            const players = this.getPlayers(element);
+            const notDonePlayers = players.filter(
+                player => !this.isAnimationPlayerDone(player)
+            );
+            if (notDonePlayers.length > 0) {
+                const lastPlayerWrapper =
+                    notDonePlayers[notDonePlayers.length - 1];
+                this.tryRunMethodOnPlayer(
+                    () =>
+                        lastPlayerWrapper.player.onDone(() => {
+                            this.runPlayer(
+                                element,
+                                metadata,
+                                destroyOnDone,
+                                onDone
+                            );
+                        }),
+                    () => {
+                        this.runPlayer(
+                            element,
+                            metadata,
+                            destroyOnDone,
+                            onDone
+                        );
+                    }
+                );
+            } else {
+                this.runPlayer(element, metadata, destroyOnDone, onDone);
+            }
+        }
+    }
+
+    tryCreateLoadingElement(
+        element: ElementRef | undefined,
+        loadingElement: ElementRef,
+        classes: { loading: string; container: string },
+        styles: {
+            containerLoading: AnimationStyleMetadata;
+            containerNotLoading: AnimationStyleMetadata;
+        },
+        inTime: string,
+        renderer: Renderer2
+    ): void {
+        if (!element || this.isElementLoading(element)) {
+            return;
+        }
+
+        this.addLoadingElement(element, loadingElement);
+
+        renderer.addClass(element.nativeElement, classes.container);
+
+        renderer.appendChild(
+            element.nativeElement,
+            loadingElement!.nativeElement
+        );
+        renderer.addClass(loadingElement!.nativeElement, classes.loading);
+
+        this.hasLoadingElement.push(element);
+
+        this.animate(
+            element,
+            animation([
+                styles.containerNotLoading,
+                animate(inTime, styles.containerLoading)
+            ])
+        );
+    }
+
+    tryRemoveLoadingElement(
+        element: ElementRef | undefined,
+        classes: { loading: string; container: string },
+        styles: {
+            loading: AnimationStyleMetadata;
+            notLoading: AnimationStyleMetadata;
+        },
+        times: { outTime: string; loaderOutTime: string },
+        renderer: Renderer2
+    ): void {
+        if (!element || !this.isElementLoading(element)) {
+            return;
+        }
+
+        const loadingElement = this.getLoadingElement(element);
+
+        const players = this.getPlayers(element);
+
+        players.forEach(player => {
+            if (!this.isAnimationPlayerDone(player)) {
+                this.tryRunMethodOnPlayer(() => player.player.destroy());
+            }
+        });
+        this.animate(
+            element,
+            animation([
+                styles.loading,
+                animate(
+                    times.outTime,
+                    style({
+                        height: element.nativeElement.scrollHeight
+                    })
+                )
+            ]),
+            true,
+            () => {
+                const hasLoadingElementIndex = this.hasLoadingElement.findIndex(
+                    e => this.elementRefEquals(e, element)
+                );
+
+                if (hasLoadingElementIndex > -1) {
+                    this.hasLoadingElement.splice(hasLoadingElementIndex, 1);
+                }
+
+                this.animate(
+                    element,
+                    animation([
+                        styles.loading,
+                        animate(times.loaderOutTime, styles.notLoading)
+                    ]),
+                    true,
+                    () => {
+                        if (loadingElement) {
+                            renderer.removeChild(
+                                element!.nativeElement,
+                                loadingElement!.nativeElement
+                            );
+
+                            this.removeLoadingElement(loadingElement);
+                        } else {
+                            throw new Error(
+                                'There is no element that was created for blocking, something has gone wrong.'
+                            );
+                        }
+
+                        renderer.removeClass(
+                            element!.nativeElement,
+                            classes.container
+                        );
+                    }
+                );
+            }
+        );
+    }
 }
 
-export interface HasAnimations {
-    readonly animationHelper: AnimationHelperService;
-    players: AnimationPlayerWrapper[];
-}
-
-export interface AnimationPlayerWrapper {
+interface AnimationPlayerWrapper {
     player: AnimationPlayer;
     done: boolean;
 }

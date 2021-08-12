@@ -16,11 +16,7 @@ import {
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import {
-    AnimationHelperService,
-    AnimationPlayerWrapper,
-    HasAnimations
-} from '../animation-helper.service';
+import { AnimationHelperService } from '../animation-helper.service';
 import { isLoadingFullPage } from '../blocking.operator';
 import {
     NgxBlockLoadingOptions,
@@ -32,9 +28,7 @@ import {
     templateUrl: './ngx-block-loading-full-page.component.html',
     styleUrls: ['./ngx-block-loading-full-page.component.scss']
 })
-export class NgxBlockLoadingFullPageComponent
-    implements OnChanges, HasAnimations
-{
+export class NgxBlockLoadingFullPageComponent implements OnChanges {
     @Input()
     template?: TemplateRef<any>;
     @Input()
@@ -50,7 +44,6 @@ export class NgxBlockLoadingFullPageComponent
     element?: ElementRef;
 
     loading: boolean = false;
-    players: AnimationPlayerWrapper[] = [];
     private onDestroy$ = new Subject();
 
     private get loadingStyle(): AnimationStyleMetadata {
@@ -102,7 +95,6 @@ export class NgxBlockLoadingFullPageComponent
 
     private removeFullPageLoading(): void {
         this.animationHelper.animate(
-            this,
             this.element,
             animation([
                 this.loadingStyle,

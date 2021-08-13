@@ -4,14 +4,13 @@
         <input type="checkbox" [(ngModel)]="fullPageLoading"
             id="fullPageLoading" />
     </div>
-    <div class="margin-y" *ngIf="fullPageLoading">
-        <label for="useTemplate">Use Template?</label>
-        <input type="checkbox" [(ngModel)]="useTemplate" id="useTemplate" />
-    </div>
     <div class="margin-y">
         <label for="testRendering">Rendering Test?</label>
-        <input type="checkbox" [(ngModel)]="testRendering"
-        id="testRendering" />
+        <input type="checkbox" [(ngModel)]="testRendering" id="testRendering" />
+    </div>
+    <div class="margin-y">
+        <label for="useTemplate">Use Template?</label>
+        <input type="checkbox" [(ngModel)]="useTemplate" id="useTemplate" />
     </div>
     <div class="margin-y">
         <button (click)="loadingTest()">
@@ -38,18 +37,34 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let result of results; let isLast = last"
-                    [ngxBlockRendered]="isLast">
-                    <td>{{result.userId}}</td>
-                    <td>{{result.title}}</td>
-                    <td>{{result.body}}</td>
-                </tr>
+                <ng-container *ngIf="!useTemplate">
+                    <tr *ngFor="let result of results; let isLast = last"
+                        [ngxBlockRendered]="isLast">
+                        <ng-container
+                            *ngTemplateOutlet="ngForTemplate; context: {result: result}">
+                        </ng-container>
+                    </tr>
+                </ng-container>
+                <ng-container *ngIf="useTemplate">
+                    <tr *ngFor="let result of results; let isLast = last"
+                        [ngxBlockRendered]="isLast" [template]="template">
+                        <ng-container
+                            *ngTemplateOutlet="ngForTemplate; context: {result: result}">
+                        </ng-container>
+                    </tr>
+                </ng-container>
                 <tr *ngIf="!results || results.length === 0">
                     <td colspan="99">No results</td>
                 </tr>
             </tbody>
         </table>
     </div>
+</ng-template>
+
+<ng-template let-result="result" #ngForTemplate>
+    <td>{{result.userId}}</td>
+    <td>{{result.title}}</td>
+    <td>{{result.body}}</td>
 </ng-template>
 
 <ng-template #notRenderingTemplate>
@@ -84,12 +99,23 @@
     </div>
 </ng-container>
 
-<ng-container *ngIf="!fullPageLoading">
+<ng-container *ngIf="!fullPageLoading && !useTemplate">
     <div ngxBlockLoading *ngIf="testRendering"
         #loadingDirective="ngxBlockLoading">
         <ng-container *ngTemplateOutlet="renderingTemplate"></ng-container>
     </div>
     <div ngxBlockLoading *ngIf="!testRendering"
+        #loadingDirective="ngxBlockLoading">
+        <ng-container *ngTemplateOutlet="notRenderingTemplate"></ng-container>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="!fullPageLoading && useTemplate">
+    <div ngxBlockLoading *ngIf="testRendering" [template]="template"
+        #loadingDirective="ngxBlockLoading">
+        <ng-container *ngTemplateOutlet="renderingTemplate"></ng-container>
+    </div>
+    <div ngxBlockLoading *ngIf="!testRendering" [template]="template"
         #loadingDirective="ngxBlockLoading">
         <ng-container *ngTemplateOutlet="notRenderingTemplate"></ng-container>
     </div>

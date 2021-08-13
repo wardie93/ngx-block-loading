@@ -108,7 +108,8 @@ export abstract class BaseLoadingDirective implements OnDestroy {
                     containerNotLoading: this.notLoadingContainerStyle
                 },
                 this.inTime,
-                this.renderer
+                this.renderer,
+                this.template == undefined
             );
         } else {
             // Waiting a tick here because we need to let Angular finish rendering
@@ -118,7 +119,6 @@ export abstract class BaseLoadingDirective implements OnDestroy {
                     this.animationHelper.tryRemoveLoadingElement(
                         this.elementToLoad,
                         {
-                            loading: this.loadingClass,
                             container: this.loadingContainerClass
                         },
                         {

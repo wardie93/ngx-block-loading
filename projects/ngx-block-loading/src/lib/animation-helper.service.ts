@@ -272,7 +272,8 @@ export class AnimationHelperService {
             containerNotLoading: AnimationStyleMetadata;
         },
         inTime: string,
-        renderer: Renderer2
+        renderer: Renderer2,
+        addLoadingClass: boolean
     ): void {
         if (!element || this.isElementLoading(element)) {
             return;
@@ -284,7 +285,9 @@ export class AnimationHelperService {
             element.nativeElement,
             loadingElement!.nativeElement
         );
-        renderer.addClass(loadingElement!.nativeElement, classes.loading);
+        if(addLoadingClass) {
+            renderer.addClass(loadingElement!.nativeElement, classes.loading);
+        }
 
         this.addLoadingElement(element, loadingElement);
         this.hasLoadingElement.push(element);
@@ -300,7 +303,7 @@ export class AnimationHelperService {
 
     tryRemoveLoadingElement(
         element: ElementRef | undefined,
-        classes: { loading: string; container: string; },
+        classes: { container: string; },
         styles: {
             loading: AnimationStyleMetadata;
             loadingContainer: AnimationStyleMetadata,

@@ -17,8 +17,7 @@
         "watch:lib": "ng build --project=ngx-block-loading --watch",
         "watch:lib:prod": "ng build --project=ngx-block-loading --watch --prod",
         "publish": "cd dist/ngx-block-loading && npm publish",
-        "start-fake-api": "json-server json-server/db.json --route json-server/routes.json --no-cors true --delay 5000",
-        "develop": "concurrently --kill-others \"npm run start-fake-api\" \"npm run watch:lib\" \"npm start\" "
+        "start:api": "json-server json-server/db.json --route json-server/routes.json --no-cors true --delay 5000"
     },
     "private": true,
     "dependencies": {
@@ -42,7 +41,6 @@
         "@types/jasmine": "~3.6.0",
         "@types/node": "^12.11.1",
         "codelyzer": "^6.0.0",
-        "concurrently": "^6.2.1",
         "jasmine-core": "~3.6.0",
         "jasmine-spec-reporter": "~5.0.0",
         "karma": "~5.1.0",

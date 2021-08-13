@@ -22,7 +22,7 @@ A loading spinner for Angular applications that appears when HTTP requests are r
 For a demo, download the repository, then run the following commands
 
 ```
-npm run start-fake-api
+npm run start:api
 npm run watch:lib
 npm start
 ```
@@ -59,10 +59,30 @@ export class AppModule { }
 You must mark a HTML element as being an element that will have a block loading element displayed over the top of it.
 
 ```html
-<div ngxBlockLoading></div>
+<div ngxBlockLoading #loading="ngxBlockLoading"></div>
 ```
 
-This will create a new element within this marked HTML element that will display a loading gif. This can be customised using CSS classes. See [Customisation](#customisation)
+This will create a new element within this marked HTML element that will display a loading gif. This can be customised using CSS classes. See [Customisation](#customisation).
+
+In order to use this element you need to have it as a `ViewChild` in your backing component. In order to do this you need to use the exported as value of `ngxBlockLoading`, eg `#loading="ngxBlockLoading"`.
+
+```typescript
+@ViewChild('loading')
+loadingDirective: NgxBlockLoadingDirective;
+```
+
+You then need to tell the request that you are making which `NgxBlockLoadingDirective`s you want to use when running it.
+
+```typescript
+@ViewChild('loading')
+loadingDirective: NgxBlockLoadingDirective;
+
+...
+
+this.http.get('https://test.com').pipe(ngxBlockLoading({ blocking: this.loadingDirective }));
+```
+
+Where the value of block can be either a single instance of `NgxBlockLoadingDirective` or an array of them.
 
 ### Full Page Blocking
 
@@ -75,16 +95,22 @@ If you want to block the whole page when loading in a certain case you need to h
 You also need to mark the HTTP request as being a full page loading request.
 
 ```typescript
-this.http.get('https://test.com').pipe(ngxBlockLoadingFullPage())
+this.http.get('https://test.com').pipe(ngxBlockLoading({ fullPage: true }));
 ```
 
 ### Rendering
 
-You can also keep the loading gif on top of the element until a certain amount of rendering is done. This is done by putting a directive against the element that is rendering and passing `false` when rendering `true` when finished. The most common usage for this is `ngFor`
+You can also keep the loading gif on top of the element until a certain amount of rendering is done. This is done by putting a directive against the element that is doing the rendering and passing `true` when finished. The most common usage for this is `ngFor`
 
 ```html
 <tr *ngFor="let result of results; let isLast = last" [ngxBlockRendered]="isLast">
 ```
+
+Unless specified otherwise this will start as soon as the directive is added to the DOM. This functionality can be switched off via the `startOnInit` input.
+
+If you do not want it to start on init then you will need to tell it when to start using the `forceStart` input.
+
+This will mark the parent element as being the container for the loading, this is to facilitate the main usage of this being for `ngFor`. The first item in the list will trigger the loading gif to appear, the last element being rendered will cause the loading gif to disappear.
 
 ## Customisation
 
@@ -107,7 +133,7 @@ Most of the options across these levels are the same, so he options are just mar
 | loadingContainerClass | ngx-block-loading--container | :heavy_check_mark: | :heavy_check_mark: | :x:                | The CSS class to put on the container for the block loading gif.                                                |
 | loadingClass          | ngx-block-loading            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | The CSS class to put on the loading element itself.                                                             |
 | loadingFullPageClass  | ngx-block-loading__full-page | :heavy_check_mark: | :x:                | :heavy_check_mark: | The extra class that goes on the full page version of the loading element itself.                               |
-| template              |                              | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | The Angular template inserted as the loading element.                                                           |
+| template              |                              | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | The Angular template inserted instead of the normal loading element with the defined classes.                                                           |
 | ngxBlockLoading       |                              | :x:                | :heavy_check_mark: | :x:                | Override whether or not to display the loading element. If this is specified running HTTP requests are ignored. |
 | isLoading             |                              | :x:                | :x:                | :heavy_check_mark: | Override whether or not to display the loading element. If this is specified running HTTP requests are ignored. |
 ### Styles

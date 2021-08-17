@@ -285,7 +285,7 @@ export class AnimationHelperService {
             element.nativeElement,
             loadingElement!.nativeElement
         );
-        if(addLoadingClass) {
+        if (addLoadingClass) {
             renderer.addClass(loadingElement!.nativeElement, classes.loading);
         }
 

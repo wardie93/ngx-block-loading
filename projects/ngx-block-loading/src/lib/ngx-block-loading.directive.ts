@@ -3,12 +3,13 @@ import {
     ElementRef,
     Inject,
     Input,
-    OnChanges, Renderer2,
-    SimpleChanges, ViewContainerRef
+    OnChanges,
+    Renderer2,
+    SimpleChanges,
+    ViewContainerRef
 } from '@angular/core';
-import {
-    AnimationHelperService
-} from './animation-helper.service';
+import { NgxBlockRenderedDirective } from 'projects/ngx-block-loading/src/lib/ngx-block-rendered.directive';
+import { AnimationHelperService } from './animation-helper.service';
 import { BaseLoadingDirective } from './base-loading.directive';
 import {
     NgxBlockLoadingOptions,
@@ -19,8 +20,10 @@ import {
     selector: '[ngxBlockLoading]',
     exportAs: 'ngxBlockLoading'
 })
-export class NgxBlockLoadingDirective extends BaseLoadingDirective
-    implements OnChanges {
+export class NgxBlockLoadingDirective
+    extends BaseLoadingDirective
+    implements OnChanges
+{
     private _isLoading: boolean = false;
 
     @Input('ngxBlockLoading')
@@ -36,7 +39,9 @@ export class NgxBlockLoadingDirective extends BaseLoadingDirective
     // See https://angular.io/guide/template-typecheck#input-setter-coercion
     static ngAcceptInputType_isLoading: boolean | '';
 
-    protected get elementToLoad(): ElementRef | undefined {
+    private renderedDirectives: NgxBlockRenderedDirective[] = [];
+
+    get elementToLoad(): ElementRef | undefined {
         return this.element;
     }
 
@@ -55,6 +60,43 @@ export class NgxBlockLoadingDirective extends BaseLoadingDirective
         const isLoadingChanges = changes['isLoading'];
         if (isLoadingChanges) {
             this.updateLoadingElement(isLoadingChanges.currentValue);
+        }
+    }
+
+    private getRenderedElementIndex(
+        renderedDirective: NgxBlockRenderedDirective
+    ): number {
+        return this.renderedDirectives.findIndex(r =>
+            r.elementToLoad?.nativeElement.isSameNode(
+                renderedDirective.elementToLoad?.nativeElement
+            )
+        );
+    }
+
+    addRenderedElement(renderedDirective: NgxBlockRenderedDirective): void {
+        if(renderedDirective.elementToLoad?.nativeElement != undefined) {
+            return;
+        }
+
+        const renderedElementIndex =
+            this.getRenderedElementIndex(renderedDirective);
+        if (renderedElementIndex === -1) {
+            this.renderedDirectives.push(renderedDirective);
+        }
+    }
+
+    removeRenderedElement(renderedDirective: NgxBlockRenderedDirective): void {
+        const renderedElementIndex =
+            this.getRenderedElementIndex(renderedDirective);
+
+        if (renderedElementIndex > -1) {
+            this.renderedDirectives.splice(renderedElementIndex, 1);
+        }
+    }
+
+    stop(): void {
+        if (this.renderedDirectives.length === 0) {
+            super.stop();
         }
     }
 }

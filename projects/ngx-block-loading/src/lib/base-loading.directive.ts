@@ -63,7 +63,7 @@ export abstract class BaseLoadingDirective implements OnDestroy {
         });
     }
 
-    protected abstract get elementToLoad(): ElementRef | undefined;
+    abstract get elementToLoad(): ElementRef | undefined;
 
     constructor(
         protected element: ElementRef,
@@ -96,7 +96,7 @@ export abstract class BaseLoadingDirective implements OnDestroy {
 
     protected updateLoadingElement(isLoading: boolean): void {
         if (isLoading) {
-            this.animationHelper.tryCreateLoadingElement(
+            const successful = this.animationHelper.tryCreateLoadingElement(
                 this.elementToLoad,
                 this.getLoadingElement(),
                 {
@@ -115,23 +115,22 @@ export abstract class BaseLoadingDirective implements OnDestroy {
             // Waiting a tick here because we need to let Angular finish rendering
             // It is likely that it actually hasn't
             setTimeout(
-                () =>
-                    this.animationHelper.tryRemoveLoadingElement(
-                        this.elementToLoad,
-                        {
-                            container: this.loadingContainerClass
-                        },
-                        {
-                            loading: this.loadingStyle,
-                            loadingContainer: this.loadingContainerStyle,
-                            notLoading: this.notLoadingStyle
-                        },
-                        {
-                            outTime: this.outTime,
-                            loaderOutTime: this.loaderOutTime
-                        },
-                        this.renderer
-                    ),
+                () => this.animationHelper.tryRemoveLoadingElement(
+                    this.elementToLoad,
+                    {
+                        container: this.loadingContainerClass
+                    },
+                    {
+                        loading: this.loadingStyle,
+                        loadingContainer: this.loadingContainerStyle,
+                        notLoading: this.notLoadingStyle
+                    },
+                    {
+                        outTime: this.outTime,
+                        loaderOutTime: this.loaderOutTime
+                    },
+                    this.renderer
+                ),
                 0
             );
         }

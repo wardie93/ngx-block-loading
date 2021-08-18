@@ -9,19 +9,19 @@ import { BaseLoadingDirective } from './base-loading.directive';
 import { NgxBlockLoadingDirective } from './ngx-block-loading.directive';
 
 @Directive({
-    selector: '[ngxBlockRendered]'
+    selector: '[ngxBlockRendering]'
 })
-export class NgxBlockRenderedDirective
+export class NgxBlockRenderingDirective
     extends BaseLoadingDirective
     implements OnChanges {
-    private _isRendered: boolean = false;
+    private _isRendering: boolean = true;
 
-    @Input('ngxBlockRendered')
-    set isRendered(value: boolean | '') {
-        this._isRendered = value !== '' && (value as unknown as boolean);
+    @Input('ngxBlockRendering')
+    set isRendering(value: boolean | '') {
+        this._isRendering = value !== '' && (value as unknown as boolean);
     }
-    get isRendered(): boolean | '' {
-        return this._isRendered;
+    get isRendering(): boolean | '' {
+        return this._isRendering;
     }
 
     @Input()
@@ -44,24 +44,24 @@ export class NgxBlockRenderedDirective
     }
 
     ngOnInit(): void {
-        if (this.startOnInit && !this.isRendered && !this.loadingDirective) {
+        if (this.startOnInit && this.isRendering && !this.loadingDirective) {
             this.start();
         }
-        if (this.loadingDirective && !this.isRendered) {
-            this.loadingDirective.addRenderedElement(this);
+        if (this.loadingDirective && this.isRendering) {
+            this.loadingDirective.addRenderingElement(this);
         }
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes['isRendered'] && this.isRendered) {
+        if (changes['isRendered'] && !this.isRendering) {
             if (this.loadingDirective) {
-                this.loadingDirective.removeRenderedElement(this);
+                this.loadingDirective.removeRenderingElement(this);
                 this.loadingDirective.stop();
                 return;
             }
             this.stop();
         }
-        if (changes['forceStart'] && !this.isRendered) {
+        if (changes['forceStart'] && this.isRendering) {
             this.start();
         }
     }

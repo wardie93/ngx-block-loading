@@ -1,8 +1,8 @@
-import { NgxBlockRenderedDirective } from './ngx-block-rendered.directive';
+import { NgxBlockRenderingDirective } from './ngx-block-rendering.directive';
 
-describe('ngxBlockRenderedDirective', () => {
+describe('ngxBlockRenderingDirective', () => {
     it('should create an instance', () => {
-        const directive = new NgxBlockRenderedDirective();
+        const directive = new NgxBlockRenderingDirective();
         expect(directive).toBeTruthy();
     });
 });

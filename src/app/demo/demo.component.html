@@ -39,7 +39,7 @@
             <tbody>
                 <ng-container *ngIf="!useTemplate">
                     <tr *ngFor="let result of results; let isLast = last"
-                        [ngxBlockRendered]="isLast">
+                        [ngxBlockRendering]="!isLast" [loadingDirective]="loadingDirective">
                         <ng-container
                             *ngTemplateOutlet="ngForTemplate; context: {result: result}">
                         </ng-container>
@@ -47,7 +47,7 @@
                 </ng-container>
                 <ng-container *ngIf="useTemplate">
                     <tr *ngFor="let result of results; let isLast = last"
-                        [ngxBlockRendered]="isLast" [template]="template">
+                        [ngxBlockRendering]="!isLast" [template]="template" [loadingDirective]="loadingDirective">
                         <ng-container
                             *ngTemplateOutlet="ngForTemplate; context: {result: result}">
                         </ng-container>

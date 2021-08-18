@@ -7,7 +7,7 @@ import { NgxBlockLoadingDirective } from './ngx-block-loading.directive';
 import {
     DEFAULT_OPTIONS, NgxBlockLoadingOptions, NGX_BLOCK_LOADING_OPTIONS
 } from './ngx-block-loading.options';
-import { NgxBlockRenderedDirective } from './ngx-block-rendered.directive';
+import { NgxBlockRenderingDirective } from './ngx-block-rendering.directive';
 
 
 export interface LoadingProviderOptions {
@@ -19,12 +19,12 @@ export interface LoadingProviderOptions {
     imports: [CommonModule],
     declarations: [
         NgxBlockLoadingDirective,
-        NgxBlockRenderedDirective,
+        NgxBlockRenderingDirective,
         NgxBlockLoadingFullPageComponent
     ],
     exports: [
         NgxBlockLoadingDirective,
-        NgxBlockRenderedDirective,
+        NgxBlockRenderingDirective,
         NgxBlockLoadingFullPageComponent
     ]
 })

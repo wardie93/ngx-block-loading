@@ -12,5 +12,5 @@ export {
     NgxBlockLoadingOptions,
     NGX_BLOCK_LOADING_OPTIONS
 } from './lib/ngx-block-loading.options';
-export * from './lib/ngx-block-rendered.directive';
+export * from './lib/ngx-block-rendering.directive';
 

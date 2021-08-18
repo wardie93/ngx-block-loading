@@ -34,7 +34,7 @@ export class NgxBlockRenderingDirective
     // Type for isLoading and forceAdd, without this it doesn't
     // work when the consuming app has strict template type checking enabled
     // See https://angular.io/guide/template-typecheck#input-setter-coercion
-    static ngAcceptInputType_isRendered: boolean | '';
+    static ngAcceptInputType_isRendering: boolean | '';
 
     get elementToLoad(): ElementRef | undefined {
         if (this.element?.nativeElement.parentElement) {
@@ -53,7 +53,7 @@ export class NgxBlockRenderingDirective
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes['isRendered'] && !this.isRendering) {
+        if (changes['isRendering'] && !this.isRendering) {
             if (this.loadingDirective) {
                 this.loadingDirective.removeRenderingElement(this);
                 this.loadingDirective.stop();

@@ -30,7 +30,7 @@ npm start
 
 The first command will start a fake API that is used to test the rendering part of the library, the second will compile `ngx-block-loading`, the third command will open a demo site that shows this working.
 
-![Demo](../../docs/demo.gif)
+![Demo](https://raw.githubusercontent.com/wardie93/ngx-block-loading/main/docs/demo.gif)
 
 ## Installation
 Install `ngx-block-loading` via NPM, using the command below.

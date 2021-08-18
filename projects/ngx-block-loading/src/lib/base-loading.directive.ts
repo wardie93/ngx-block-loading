@@ -96,7 +96,7 @@ export abstract class BaseLoadingDirective implements OnDestroy {
 
     protected updateLoadingElement(isLoading: boolean): void {
         if (isLoading) {
-            const successful = this.animationHelper.tryCreateLoadingElement(
+            this.animationHelper.tryCreateLoadingElement(
                 this.elementToLoad,
                 this.getLoadingElement(),
                 {

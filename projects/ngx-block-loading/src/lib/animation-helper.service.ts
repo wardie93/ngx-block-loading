@@ -4,8 +4,7 @@ import {
     AnimationBuilder,
     AnimationPlayer,
     AnimationReferenceMetadata,
-    AnimationStyleMetadata,
-    style,
+    AnimationStyleMetadata, style,
     useAnimation
 } from '@angular/animations';
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
@@ -144,7 +143,7 @@ export class AnimationHelperService {
         this.loadingElements.splice(loadingElementIndex, 1);
     }
 
-    private isElementLoading(element: ElementRef | undefined): boolean {
+    isElementLoading(element: ElementRef | undefined): boolean {
         if (!element) {
             return false;
         }

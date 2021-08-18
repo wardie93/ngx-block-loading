@@ -22,8 +22,7 @@ import {
 })
 export class NgxBlockLoadingDirective
     extends BaseLoadingDirective
-    implements OnChanges
-{
+    implements OnChanges {
     private _isLoading: boolean = false;
 
     @Input('ngxBlockLoading')
@@ -74,7 +73,7 @@ export class NgxBlockLoadingDirective
     }
 
     addRenderedElement(renderedDirective: NgxBlockRenderedDirective): void {
-        if(renderedDirective.elementToLoad?.nativeElement != undefined) {
+        if (renderedDirective.elementToLoad?.nativeElement == undefined) {
             return;
         }
 
@@ -82,6 +81,10 @@ export class NgxBlockLoadingDirective
             this.getRenderedElementIndex(renderedDirective);
         if (renderedElementIndex === -1) {
             this.renderedDirectives.push(renderedDirective);
+
+            if (!this.animationHelper.isElementLoading(this.elementToLoad)) {
+                this.start();
+            }
         }
     }
 

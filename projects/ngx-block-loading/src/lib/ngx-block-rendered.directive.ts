@@ -47,7 +47,7 @@ export class NgxBlockRenderedDirective
         if (this.startOnInit && !this.isRendered && !this.loadingDirective) {
             this.start();
         }
-        if (this.loadingDirective) {
+        if (this.loadingDirective && !this.isRendered) {
             this.loadingDirective.addRenderedElement(this);
         }
     }

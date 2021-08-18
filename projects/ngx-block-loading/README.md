@@ -13,6 +13,7 @@ A loading spinner for Angular applications that appears when HTTP requests are r
   - [Getting started](#getting-started)
     - [Full Page Blocking](#full-page-blocking)
     - [Rendering](#rendering)
+      - [Working with existing Loading Directive](#working-with-existing-loading-directive)
   - [Customisation](#customisation)
     - [Input parameters](#input-parameters)
     - [Styles](#styles)
@@ -28,6 +29,8 @@ npm start
 ```
 
 The first command will start a fake API that is used to test the rendering part of the library, the second will compile `ngx-block-loading`, the third command will open a demo site that shows this working.
+
+![Demo](../../docs/demo.gif)
 
 ## Installation
 Install `ngx-block-loading` via NPM, using the command below.
@@ -59,7 +62,7 @@ export class AppModule { }
 You must mark a HTML element as being an element that will have a block loading element displayed over the top of it.
 
 ```html
-<div ngxBlockLoading #loading="ngxBlockLoading"></div>
+<table ngxBlockLoading #loading="ngxBlockLoading"></table>
 ```
 
 This will create a new element within this marked HTML element that will display a loading gif. This can be customised using CSS classes. See [Customisation](#customisation).
@@ -100,10 +103,10 @@ this.http.get('https://test.com').pipe(ngxBlockLoading({ fullPage: true }));
 
 ### Rendering
 
-You can also keep the loading gif on top of the element until a certain amount of rendering is done. This is done by putting a directive against the element that is doing the rendering and passing `true` when finished. The most common usage for this is `ngFor`
+You can also keep the loading gif on top of the element until a certain amount of rendering is done. This is done by putting a directive against the element that is doing the rendering and passing `false` when finished. The most common usage for this is `ngFor` after running a HTTP request.
 
 ```html
-<tr *ngFor="let result of results; let isLast = last" [ngxBlockRendered]="isLast">
+<tr *ngFor="let result of results; let isLast = last" [ngxBlockRendering]="!isLast">
 ```
 
 Unless specified otherwise this will start as soon as the directive is added to the DOM. This functionality can be switched off via the `startOnInit` input.
@@ -111,6 +114,18 @@ Unless specified otherwise this will start as soon as the directive is added to 
 If you do not want it to start on init then you will need to tell it when to start using the `forceStart` input.
 
 This will mark the parent element as being the container for the loading, this is to facilitate the main usage of this being for `ngFor`. The first item in the list will trigger the loading gif to appear, the last element being rendered will cause the loading gif to disappear.
+
+#### Working with existing Loading Directive
+
+If you are using this rendering directive it will most likely conflict with any loading directives - the loading directive will stop and the rendering directive will start with a gap. In order to resolve this we can tell the rendering directive that it is using a loading directive.
+
+```html
+<table ngxBlockLoading #loading="ngxBlockLoading">
+
+...
+
+<tr *ngFor="let result of results; let isLast = last" [ngxBlockRendering]="!isLast" [loadingDirective]="loading>
+```
 
 ## Customisation
 

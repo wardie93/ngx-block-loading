@@ -203,7 +203,7 @@ export class AnimationHelperService {
     ): void {
         try {
             playerMethod();
-        } catch (error) {
+        } catch (error: any) {
             // This error means that the player has been destroyed
             // However, Angular doesn't provide a means of checking if this has been done already
             // So we have to catch the error
